@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userID;
+    private long userID;
 
     @Column(name = "Username")
     private String username;
@@ -28,11 +28,11 @@ public class User {
 
     // Getters and Setters
 
-    public int getUserID() {
+    public long getUserID() {
         return userID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(long userID) {
         this.userID = userID;
     }
 

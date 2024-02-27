@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<User> addUser(@RequestBody User user) throws IOException {
+    public ResponseEntity<User> addUser(@RequestBody User user){
         try{
             return new ResponseEntity<User>(userService.addUser(user), HttpStatus.OK);
         }catch (UserAlreadyExistException e){
