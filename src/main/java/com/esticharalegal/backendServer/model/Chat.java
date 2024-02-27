@@ -3,11 +3,16 @@ package com.esticharalegal.backendServer.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Table(name="chats")
+
 @Entity
+
 public class Chat {
 
     @Id
