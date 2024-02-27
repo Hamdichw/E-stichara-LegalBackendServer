@@ -22,13 +22,9 @@ public class ChatController {
     private ChatService chatService;
 
     @PostMapping("/add")
-    public ResponseEntity<Chat> createChat(@RequestBody Chat chat) throws IOException {
+    public ResponseEntity<Chat> createChat(@RequestBody Chat chat) throws IOException, ChatAlreadyExistException {
 
-        try {
-            return new ResponseEntity<Chat>(chatService.addChat(chat), HttpStatus.CREATED);
-        } catch (ChatAlreadyExistException e) {
-            return new ResponseEntity("Chat Already Exist", HttpStatus.CONFLICT);
-        }
+        return new ResponseEntity<Chat>(chatService.addChat(chat), HttpStatus.CREATED);
     }
 
     @PostMapping("/add/message1")
