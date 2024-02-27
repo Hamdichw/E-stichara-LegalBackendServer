@@ -1,0 +1,9 @@
+{
+    "build": {
+        "type": "maven",
+        "goal": "-Pprod package -DskipTests"
+    },
+    "deploy": {
+    "jarName": "./target/backendServer-0.0.1-SNAPSHOT.jar"
+    }
+}
