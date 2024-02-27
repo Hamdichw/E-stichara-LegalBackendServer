@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User addUser(User user) throws UserAlreadyExistException {
-       Optional<User> user1=userRepository.findById(user.getUserID());
+       Optional<User> user1=userRepository.findByUsername(user.getUsername());
 
        if (user1.isPresent()){
            throw new UserAlreadyExistException();
