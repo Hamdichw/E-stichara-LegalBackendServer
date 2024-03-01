@@ -57,6 +57,7 @@ public class UserAuthenticationProvider {
         DecodedJWT decoded = verifier.verify(token);
 
         UserDTO user = UserDTO.builder()
+                .userID(decoded.getClaim("userID").asLong())
                 .username(decoded.getSubject())
                 .firstName(decoded.getClaim("firstName").asString())
                 .lastName(decoded.getClaim("lastName").asString())
