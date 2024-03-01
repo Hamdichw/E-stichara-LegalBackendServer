@@ -2,8 +2,7 @@ package com.esticharalegal.backendServer.service;
 
 
 
-import com.esticharalegal.backendServer.exceptions.ClientAlreadyExistException;
-import com.esticharalegal.backendServer.exceptions.ClientNotFoundException;
+import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.model.Client;
 import com.esticharalegal.backendServer.model.User;
 import com.esticharalegal.backendServer.repository.ClientRepository;
@@ -22,20 +21,20 @@ public class ClientService{
     private UserRepository userRepository;
 
 
-    public List<Client> getall() throws ClientNotFoundException {
+    public List<Client> getall() throws AppException {
         List< Client> users = clientRepository.findAll();
         if (users.isEmpty()) {
-            throw new  ClientNotFoundException();
+            throw new AppException();
         } else {
             return users;
         }
     }
 
-    public  Client addClient(Client client) throws ClientAlreadyExistException {
+    public  Client addClient(Client client) throws AppException {
         Optional<User> user1 = userRepository.findByUsername(client.getUser().getUsername());
 
         if (user1.isPresent()) {
-            throw new  ClientAlreadyExistException();
+            throw new AppException();
         } else {
             userRepository.save(client.getUser());
             return clientRepository.save(client);

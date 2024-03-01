@@ -35,20 +35,20 @@ public class ChatService {
     }
 
      
-    public List<Message> getAllMessagesInChat(int chatId) throws NoChatExistsInTheRepository {
+    public List<Message> getAllMessagesInChat(int chatId) throws AppException {
         Optional<Chat> chat = chatRepository.findById(chatId);
 
         if(chat.isEmpty()){
-            throw new NoChatExistsInTheRepository();
+            throw new AppException();
         }else {
             return chat.get().getMessageList();
         }
     }
 
      
-    public List<Chat> findallchats() throws NoChatExistsInTheRepository {
+    public List<Chat> findallchats() throws AppException {
         if (chatRepository.findAll().isEmpty()) {
-            throw new NoChatExistsInTheRepository();
+            throw new AppException();
         } else {
             return chatRepository.findAll();
         }
@@ -56,45 +56,45 @@ public class ChatService {
     }
 
      
-    public Chat getById(int id) throws ChatNotFoundException {
+    public Chat getById(int id) throws AppException {
         Optional<Chat> chatid = chatRepository.findById(id);
         if (chatid.isPresent()) {
             return chatid.get();
         } else {
-            throw new ChatNotFoundException();
+            throw new AppException();
         }
     }
 
      
-    public HashSet<Chat> getChatByFirstUserName(String username) throws ChatNotFoundException {
+    public HashSet<Chat> getChatByFirstUserName(String username) throws AppException {
         HashSet<Chat> chat = chatRepository.getChatByFirstUserName(username);
 
         if (chat.isEmpty()) {
-            throw new ChatNotFoundException();
+            throw new AppException();
         } else {
             return chat;
         }
     }
 
      
-    public HashSet<Chat> getChatBySecondUserName(String username) throws ChatNotFoundException {
+    public HashSet<Chat> getChatBySecondUserName(String username) throws AppException {
         HashSet<Chat> chat = chatRepository.getChatBySecondUserName(username);
         if (chat.isEmpty()) {
-            throw new ChatNotFoundException();
+            throw new AppException();
         } else {
             return chat;
         }
     }
 
      
-    public HashSet<Chat> getChatByFirstUserNameOrSecondUserName(String username) throws ChatNotFoundException {
+    public HashSet<Chat> getChatByFirstUserNameOrSecondUserName(String username) throws AppException {
         HashSet<Chat> chat = chatRepository.getChatByFirstUserName(username);
         HashSet<Chat> chat1 = chatRepository.getChatBySecondUserName(username);
 
         chat1.addAll(chat);
 
         if (chat.isEmpty() && chat1.isEmpty()) {
-            throw new ChatNotFoundException();
+            throw new AppException();
         } else if (chat1.isEmpty()) {
             return chat;
         } else {
@@ -103,11 +103,11 @@ public class ChatService {
     }
 
      
-    public HashSet<Chat> getChatByFirstUserNameAndSecondUserName(String firstUserName, String secondUserName) throws ChatNotFoundException {
+    public HashSet<Chat> getChatByFirstUserNameAndSecondUserName(String firstUserName, String secondUserName) throws AppException {
         HashSet<Chat> chat = chatRepository.getChatByFirstUserNameAndSecondUserName(firstUserName, secondUserName);
         HashSet<Chat> chat1 = chatRepository.getChatBySecondUserNameAndFirstUserName(firstUserName, secondUserName);
         if (chat.isEmpty() && chat1.isEmpty()) {
-            throw new ChatNotFoundException();
+            throw new AppException();
         } else if (chat.isEmpty()) {
             return chat1;
         } else {
@@ -116,7 +116,7 @@ public class ChatService {
     }
 
      
-    public Chat addMessage(Message add, int chatId) throws ChatNotFoundException {
+    public Chat addMessage(Message add, int chatId) throws AppException {
         Optional<Chat> chat=chatRepository.findById(chatId);
         Chat abc=chat.get();
 

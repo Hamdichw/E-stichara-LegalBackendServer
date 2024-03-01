@@ -22,7 +22,7 @@ public class ChatController {
     private ChatService chatService;
 
     @PostMapping("/add")
-    public ResponseEntity<Chat> createChat(@RequestBody Chat chat) throws IOException, ChatAlreadyExistException {
+    public ResponseEntity<Chat> createChat(@RequestBody Chat chat) throws IOException, AppException {
 
         return new ResponseEntity<Chat>(chatService.addChat(chat), HttpStatus.CREATED);
     }
@@ -36,7 +36,7 @@ public class ChatController {
     public ResponseEntity<List<Chat>> getAllChats() {
         try {
             return new ResponseEntity<List<Chat>>(chatService.findallchats(), HttpStatus.OK);
-        } catch (NoChatExistsInTheRepository e) {
+        } catch (AppException e) {
            return new ResponseEntity("List not found", HttpStatus.CONFLICT);
         }
     }
@@ -48,7 +48,7 @@ public class ChatController {
             chat.setChatId(chatId);
             List<Message> messageList = this.chatService.getAllMessagesInChat(chatId);
             return ResponseEntity.ok(messageList);
-        } catch (NoChatExistsInTheRepository e) {
+        } catch (AppException e) {
             return new ResponseEntity("Message List not found", HttpStatus.CONFLICT);
         }
     }
@@ -57,7 +57,7 @@ public class ChatController {
     public ResponseEntity<Chat> getChatById(@PathVariable int id) {
         try {
             return new ResponseEntity<Chat>(chatService.getById(id), HttpStatus.OK);
-        } catch (ChatNotFoundException e) {
+        } catch (AppException e) {
            return new ResponseEntity("Chat Not Found", HttpStatus.NOT_FOUND);
         }
     }
@@ -67,7 +67,7 @@ public class ChatController {
         try {
             HashSet<Chat> byChat = this.chatService.getChatByFirstUserName(username);
             return new ResponseEntity<>(byChat, HttpStatus.OK);
-        } catch (ChatNotFoundException e) {
+        } catch (AppException e) {
             return new ResponseEntity("Chat Not Exits", HttpStatus.CONFLICT);
         }
     }
@@ -80,7 +80,7 @@ public class ChatController {
         try {
             HashSet<Chat> byChat = this.chatService.getChatBySecondUserName(username);
             return new ResponseEntity<>(byChat, HttpStatus.OK);
-        } catch (ChatNotFoundException e) {
+        } catch (AppException e) {
             return new ResponseEntity("Chat Not Exits", HttpStatus.CONFLICT);
         }
     }
@@ -91,7 +91,7 @@ public class ChatController {
         try {
             HashSet<Chat> byChat = this.chatService.getChatByFirstUserNameOrSecondUserName(username);
             return new ResponseEntity<>(byChat, HttpStatus.OK);
-        } catch (ChatNotFoundException e) {
+        } catch (AppException e) {
             return new ResponseEntity("Chat Not Exits", HttpStatus.CONFLICT);
         }
     }
@@ -103,14 +103,14 @@ public class ChatController {
         try {
             HashSet<Chat> chatByBothEmail = this.chatService.getChatByFirstUserNameAndSecondUserName(firstUserName, secondUserName);
             return new ResponseEntity<>(chatByBothEmail, HttpStatus.OK);
-        } catch (ChatNotFoundException e) {
+        } catch (AppException e) {
             return new ResponseEntity("Chat Not Exits", HttpStatus.NOT_FOUND);
         }
     }
 
 
     @PutMapping("/message/{chatId}")
-    public ResponseEntity<Chat> addMessage(@RequestBody Message add , @PathVariable int chatId) throws ChatNotFoundException {
+    public ResponseEntity<Chat> addMessage(@RequestBody Message add , @PathVariable int chatId) throws AppException {
         return new ResponseEntity<Chat>(chatService.addMessage(add,chatId), HttpStatus.OK);
     }
 
