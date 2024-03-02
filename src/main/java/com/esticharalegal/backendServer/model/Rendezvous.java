@@ -19,11 +19,11 @@ public class Rendezvous {
 
     @ManyToOne
     @JoinColumn(name = "ClientID")
-    private Client client;
+    private User client;
 
     @ManyToOne
     @JoinColumn(name = "LawyerID")
-    private Lawyer lawyer;
+    private User lawyer;
 
     @Column(name = "Date")
     private Date date;

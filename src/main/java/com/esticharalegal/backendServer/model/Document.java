@@ -6,17 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
 @Entity
 @Table(name = "documents")
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int documentID;
+    private Long documentID;
 
     @Column(name = "Title")
     private String title;
@@ -29,10 +29,12 @@ public class Document {
     private User uploadedBy;
 
     @Column(name = "UploadDate")
-    private Date uploadDate;
+    private LocalDateTime uploadDate;
 
-    @Column(name = "FileURL")
-    private String fileURL;
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    private byte[] content;
+
 
     // Getters and setters
 }

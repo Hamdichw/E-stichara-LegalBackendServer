@@ -1,7 +1,9 @@
 package com.esticharalegal.backendServer.mapper;
 
-import com.esticharalegal.backendServer.dto.SignUpDTO;
-import com.esticharalegal.backendServer.dto.UserDTO;
+import com.esticharalegal.backendServer.dto.ClientDTO;
+import com.esticharalegal.backendServer.dto.LawyerDTO;
+import com.esticharalegal.backendServer.dto.SignUpClientDTO;
+import com.esticharalegal.backendServer.dto.SignUpLawyerDTO;
 import com.esticharalegal.backendServer.model.User;
 
 
@@ -13,8 +15,13 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    UserDTO toUserDto(User user);
+    ClientDTO toClientDto(User user);
+    @Mapping(target = "password", ignore = true)
 
-    User signUpToUser(SignUpDTO signUpDto);
+    User signUpToUser(SignUpClientDTO signUpClientDto);
+
+    LawyerDTO toLawyerDto(User user);
+    @Mapping(target = "password", ignore = true)
+    User signUpToUser(SignUpLawyerDTO signUpLawyerDTO);
 
 }

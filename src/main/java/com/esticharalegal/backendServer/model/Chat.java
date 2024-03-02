@@ -20,6 +20,7 @@ public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int chatId;
+
     private String firstUserName;
     private String secondUserName;
 

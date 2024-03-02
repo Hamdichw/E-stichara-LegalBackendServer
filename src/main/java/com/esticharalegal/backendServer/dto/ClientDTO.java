@@ -1,66 +1,46 @@
-package com.esticharalegal.backendServer.model;
+package com.esticharalegal.backendServer.dto;
 
+import com.esticharalegal.backendServer.model.UserType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.security.*;
 
 @Data
 @NoArgsConstructor
-@Entity
-@AllArgsConstructor
 @Builder
-@Table(name = "users")
-public class User {
+@AllArgsConstructor
+public class ClientDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userID;
-
-    @Column(name = "firstName", nullable = false)
-    @Size(max = 100)
+    private Long userID;
     private String firstName;
-
-    @Column(name = "lastName", nullable = false)
-    @Size(max = 100)
     private String lastName;
-
-    @Column(name = "Username")
     private String username;
-
-    @Column(name = "Email")
+    private String token;
+    private UserType userType;
     private String email;
-
-    @Column(nullable = false)
-    @Size(max = 100)
-    private String password;
-
-    @Column(name = "UserType")
-    private UserType role;
-
-    @Column(name = "Specialization")
-    private String specialization;
-
-    @Column(name = "LicenseNumber")
-    private String licenseNumber;
-
-    @Column(name = "Bio")
-    private String bio;
-
+    @JsonIgnore
     @Transient
     private KeyPair keyPair;
 
     @Lob // Use @Lob annotation to store large binary data (keys)
-    @Column(columnDefinition = "LONGBLOB")
     private byte[] publicKey; // Store public key as byte array
 
     @Lob
-    @Column(columnDefinition = "LONGBLOB")
     private byte[] privateKey;
-    public void generateKeyPair() {
+    public ClientDTO(String username, String firstName, String lastName, UserType userType, String email) {
+        this.username = username;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.userType = userType;
+        this.email = email;
+        generateKeyPair();
+    }
+
+
+    private void generateKeyPair() {
         try {
             KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
             keyPairGenerator.initialize(2048);

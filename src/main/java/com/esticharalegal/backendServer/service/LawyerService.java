@@ -1,45 +1,59 @@
 package com.esticharalegal.backendServer.service;
 
-
+import com.esticharalegal.backendServer.dto.*;
 import com.esticharalegal.backendServer.exceptions.AppException;
-import com.esticharalegal.backendServer.model.Lawyer;
-import com.esticharalegal.backendServer.repository.LawyerRepository;
+import com.esticharalegal.backendServer.mapper.UserMapper;
+import com.esticharalegal.backendServer.model.User;
+import com.esticharalegal.backendServer.model.UserType;
 import com.esticharalegal.backendServer.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.nio.CharBuffer;
 import java.util.Optional;
-
 @Service
+@AllArgsConstructor
 public class LawyerService {
 
-    @Autowired
-    private LawyerRepository lawyerRepository;
-    @Autowired
-    private UserRepository userRepository;
+    private  final UserRepository userRepository;
 
 
-    public List<Lawyer> getall() throws AppException {
-        List< Lawyer> users = lawyerRepository.findAll();
-        if (users.isEmpty()) {
-            throw new  AppException();
-        } else {
-            return users;
+    private final PasswordEncoder passwordEncoder;
+
+    private  final UserMapper lawyerMapper;
+
+    public LawyerDTO login(CredentialsLawyerDTO credentialsLawyerDTO) throws AppException {
+        User user = userRepository.findByUsername(credentialsLawyerDTO.username())
+                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
+
+        if (passwordEncoder.matches(CharBuffer.wrap(credentialsLawyerDTO.password()), user.getPassword())) {
+            return lawyerMapper.toLawyerDto(user);
         }
+        throw new AppException("Invalid password", HttpStatus.BAD_REQUEST);
     }
 
-    public  Lawyer addLawyer(Lawyer client) throws AppException {
-        Optional<Lawyer> user1 = lawyerRepository.findByLicenseNumber(client.getLicenseNumber());
+    public LawyerDTO register(SignUpLawyerDTO userDto) throws AppException {
+        Optional<User> optionalUser = userRepository.findByLicenseNumber(userDto.licenseNumber());
 
-        if (user1.isPresent()) {
-            throw new  AppException();
-        } else {
-            userRepository.save(client.getUser());
-            return lawyerRepository.save(client);
+        if (optionalUser.isPresent()) {
+            throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
         }
+
+        User user = lawyerMapper.signUpToUser(userDto);
+        user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userDto.password())));
+        user.generateKeyPair();
+        user.setRole(UserType.LAWYER);
+        User savedUser = userRepository.save(user);
+
+        return lawyerMapper.toLawyerDto(savedUser);
     }
 
-
+    public LawyerDTO findByLogin(String login) throws AppException {
+        User user = userRepository.findByUsername(login)
+                .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
+        return lawyerMapper.toLawyerDto(user);
+    }
 
 }
