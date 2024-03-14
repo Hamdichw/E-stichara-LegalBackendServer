@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.security.*;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -49,7 +50,13 @@ public class User {
 
     @Column(name = "Bio")
     private String bio;
-
+    @ManyToMany
+    @JoinTable(
+            name = "user_connections",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "connected_user_id")
+    )
+    private List<User> connections;
     @Transient
     private KeyPair keyPair;
 

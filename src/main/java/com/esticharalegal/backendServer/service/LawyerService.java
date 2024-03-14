@@ -55,5 +55,16 @@ public class LawyerService {
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
         return lawyerMapper.toLawyerDto(user);
     }
-
+    public void addConnection(Long userId, Long connectionUserId) {
+        Optional<User> user = userRepository.findById(userId);
+        Optional<User> connectionUser = userRepository.findById(connectionUserId);
+        if (user.isPresent() && connectionUser.isPresent()) {
+            User userEntity = user.get();
+            User connectionUserEntity = connectionUser.get();
+            userEntity.getConnections().add(connectionUserEntity);
+            connectionUserEntity.getConnections().add(userEntity);
+            userRepository.save(userEntity);
+            userRepository.save(connectionUserEntity);
+        }
+    }
 }

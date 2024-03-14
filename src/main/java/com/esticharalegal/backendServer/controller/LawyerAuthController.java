@@ -10,11 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -50,5 +48,11 @@ public class LawyerAuthController {
         cookie.setMaxAge(0); // Immediately expire the cookie
         response.addCookie(cookie);
         return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @PostMapping("/{userId}/connections/{connectionUserId}")
+    public ResponseEntity<String> addConnection(@PathVariable Long userId, @PathVariable Long connectionUserId) {
+        lawyerService.addConnection(userId, connectionUserId);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Connection added successfully");
     }
 }
