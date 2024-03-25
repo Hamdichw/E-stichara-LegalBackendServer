@@ -30,8 +30,8 @@ public class DocumentService {
         }
     }
 
-    public List<Document> getAllDocuments() {
-        return documentRepository.findAll();
+    public List<Document> getAllDocuments(Long idUser) {
+        return documentRepository.findDocumentByUploadedByIs(idUser);
     }
     public Optional<Document> findDocumentById(Long id) {
         return documentRepository.findById(id);

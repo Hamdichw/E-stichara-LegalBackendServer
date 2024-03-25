@@ -20,10 +20,10 @@ import java.util.Optional;
 @RequestMapping("/documents")
 public class DocumentController {
     private final DocumentService documentService;
-    @GetMapping("/all")
-    public ResponseEntity<List<Document>> getAllDocuments() {
+    @GetMapping("/all/{idUser}")
+    public ResponseEntity<List<Document>> getAllDocuments(@PathVariable Long idUser) {
         try {
-            List<Document> documents = documentService.getAllDocuments();
+            List<Document> documents = documentService.getAllDocuments(idUser);
             return new ResponseEntity<>(documents, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
