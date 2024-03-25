@@ -31,7 +31,8 @@ public class DocumentService {
     }
 
     public List<Document> getAllDocuments(Long idUser) {
-        return documentRepository.findDocumentByUploadedByIs(idUser);
+        Optional<User> user = userRepository.findById(idUser);
+        return user.map(documentRepository::findDocumentByUploadedByIs).orElse(null);
     }
     public Optional<Document> findDocumentById(Long id) {
         return documentRepository.findById(id);
