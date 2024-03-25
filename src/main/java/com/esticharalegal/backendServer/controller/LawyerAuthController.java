@@ -55,4 +55,12 @@ public class LawyerAuthController {
         lawyerService.addConnection(userId, connectionUserId);
         return ResponseEntity.status(HttpStatus.CREATED).body("Connection added successfully");
     }
+
+    @PostMapping("/reset")
+    public void resetPassword(@RequestParam("email") String email) {
+        lawyerService.generateResetPasswordToken(email);
+    }
+
+    // Endpoint to update password
+
 }

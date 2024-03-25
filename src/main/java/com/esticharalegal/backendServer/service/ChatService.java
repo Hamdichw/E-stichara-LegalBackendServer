@@ -8,6 +8,7 @@ import com.esticharalegal.backendServer.model.Chat;
 import com.esticharalegal.backendServer.model.Message;
 import com.esticharalegal.backendServer.repository.ChatRepository;
 import com.esticharalegal.backendServer.repository.MessageRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 @Service
+@RequiredArgsConstructor
 public class ChatService {
     
-    @Autowired
-    private ChatRepository chatRepository;
 
-    @Autowired
-    private MessageRepository messageRepository;
+    private final ChatRepository chatRepository;
+
+    private final MessageRepository messageRepository;
 
     public Chat addChat(Chat chat) {
         return chatRepository.save(chat);

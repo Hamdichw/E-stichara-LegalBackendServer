@@ -8,17 +8,23 @@ import com.esticharalegal.backendServer.model.UserType;
 import com.esticharalegal.backendServer.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.CharBuffer;
 import java.util.Optional;
+import java.util.Random;
+
 @Service
 @AllArgsConstructor
 public class LawyerService {
 
     private  final UserRepository userRepository;
 
+
+    private final JavaMailSender javaMailSender;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -66,5 +72,53 @@ public class LawyerService {
             userRepository.save(userEntity);
             userRepository.save(connectionUserEntity);
         }
+    }
+
+
+    // Method to generate reset password token and send it to the user
+    public void generateResetPasswordToken(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user != null) {
+            // Generate a new random password
+            String newPassword = generateRandomPassword();
+
+            // Encode the password before saving it to the user
+            String encodedPassword = passwordEncoder.encode(newPassword);
+            user.get().setPassword(encodedPassword);
+
+            // Update user's password in the database
+            userRepository.save(user.get());
+
+            // Send the new password to the user via email
+            sendNewPasswordByEmail(user.get().getEmail(), newPassword);
+        }
+    }
+    // Method to generate a random password
+    private String generateRandomPassword() {
+        String upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+        String numbers = "0123456789";
+        String specialCharacters = "!@#$%^&*()_+";
+
+        String allCharacters = upperCaseLetters + lowerCaseLetters + numbers + specialCharacters;
+
+        StringBuilder newPassword = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < 10; i++) { // Generate a 10-character password
+            newPassword.append(allCharacters.charAt(random.nextInt(allCharacters.length())));
+        }
+
+        return newPassword.toString();
+    }
+
+    // Method to send the new password to the user via email
+    private void sendNewPasswordByEmail(String email, String newPassword) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setSubject("Your new password");
+        mailMessage.setText("Your new password is: " + newPassword);
+
+        javaMailSender.send(mailMessage);
     }
 }

@@ -27,6 +27,12 @@ public class Transaction {
 
     @Column(name = "date")
     private Date date;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "lawyer_id")
+    private User lawyer;
 
-    // Getters and setters
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "client_id")
+    private User client;
+
 }

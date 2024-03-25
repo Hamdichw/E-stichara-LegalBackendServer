@@ -1,5 +1,6 @@
 package com.esticharalegal.backendServer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.security.*;
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -32,6 +34,10 @@ public class User {
     @Column(name = "Username")
     private String username;
 
+
+    @Column(name = "profile Image")
+    private String profileImage;
+
     @Column(name = "Email")
     private String email;
 
@@ -50,13 +56,22 @@ public class User {
 
     @Column(name = "Bio")
     private String bio;
-    @ManyToMany
+    @Column(name = "Birthday")
+    @Temporal(TemporalType.DATE)
+    private Date birthday;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(
             name = "user_connections",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "connected_user_id")
     )
     private List<User> connections;
+
+    @ManyToMany(mappedBy = "participants")
+    @JsonIgnore
+    private List<Chat> chats;
+
     @Transient
     private KeyPair keyPair;
 

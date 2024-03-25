@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 @Data
 @AllArgsConstructor
@@ -29,7 +30,7 @@ public class DocumentSigned {
     private String signature;
 
     @Column(name = "SignedDate")
-    private Date signedDate;
+    private LocalDateTime signedDate;
 
     // Getters and setters
 }
