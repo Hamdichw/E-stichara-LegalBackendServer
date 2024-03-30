@@ -6,7 +6,7 @@ import com.esticharalegal.backendServer.dto.ClientDTO;
 import com.esticharalegal.backendServer.dto.CredentialsClientDTO;
 import com.esticharalegal.backendServer.dto.SignUpClientDTO;
 import com.esticharalegal.backendServer.exceptions.AppException;
-import com.esticharalegal.backendServer.model.UserType;
+import com.esticharalegal.backendServer.Enum.UserType;
 import com.esticharalegal.backendServer.service.ClientService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,10 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -56,5 +53,8 @@ public class ClientAuthController {
         response.addCookie(cookie);
         return ResponseEntity.ok("Logged out successfully");
     }
-
+    @PostMapping("/reset")
+    public void resetPassword(@RequestParam("email") String email) {
+        clientService.generateResetPasswordToken(email);
+    }
 }

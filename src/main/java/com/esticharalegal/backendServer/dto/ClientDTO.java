@@ -1,6 +1,6 @@
 package com.esticharalegal.backendServer.dto;
 
-import com.esticharalegal.backendServer.model.UserType;
+import com.esticharalegal.backendServer.Enum.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;

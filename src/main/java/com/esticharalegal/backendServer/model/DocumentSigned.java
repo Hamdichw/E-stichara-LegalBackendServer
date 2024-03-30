@@ -26,7 +26,8 @@ public class DocumentSigned {
     @JoinColumn(name = "SignerID")
     private User signer;
 
-    @Column(name = "Signature")
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
     private String signature;
 
     @Column(name = "SignedDate")

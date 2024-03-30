@@ -3,7 +3,7 @@ package com.esticharalegal.backendServer.controller;
 import com.esticharalegal.backendServer.config.UserAuthenticationProvider;
 import com.esticharalegal.backendServer.dto.*;
 import com.esticharalegal.backendServer.exceptions.AppException;
-import com.esticharalegal.backendServer.model.UserType;
+import com.esticharalegal.backendServer.Enum.UserType;
 import com.esticharalegal.backendServer.service.LawyerService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

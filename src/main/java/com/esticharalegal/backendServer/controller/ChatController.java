@@ -32,8 +32,8 @@ public class ChatController {
             return new ResponseEntity<Message>(chatService.addMessage2(message), HttpStatus.CREATED);
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Chat>> getAllChats() {
+    @GetMapping("/all/{userId}")
+    public ResponseEntity<List<Chat>> getAllChats(@PathVariable long userId) {
         try {
             return new ResponseEntity<List<Chat>>(chatService.findallchats(), HttpStatus.OK);
         } catch (AppException e) {

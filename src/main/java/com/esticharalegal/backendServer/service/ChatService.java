@@ -6,8 +6,10 @@ import com.esticharalegal.backendServer.exceptions.*;
 
 import com.esticharalegal.backendServer.model.Chat;
 import com.esticharalegal.backendServer.model.Message;
+import com.esticharalegal.backendServer.model.User;
 import com.esticharalegal.backendServer.repository.ChatRepository;
 import com.esticharalegal.backendServer.repository.MessageRepository;
+import com.esticharalegal.backendServer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,6 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ChatService {
     
+    private final UserRepository userRepository;
 
     private final ChatRepository chatRepository;
 
@@ -55,6 +58,7 @@ public class ChatService {
         }
 
     }
+
 
      
     public Chat getById(int id) throws AppException {

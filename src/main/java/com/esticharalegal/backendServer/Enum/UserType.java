@@ -1,4 +1,4 @@
-package com.esticharalegal.backendServer.model;
+package com.esticharalegal.backendServer.Enum;
 
 public enum UserType {
     LAWYER,

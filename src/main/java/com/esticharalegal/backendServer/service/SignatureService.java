@@ -26,7 +26,7 @@ public class SignatureService{
 
 
 
-    public DocumentSigned signDocument(long documentId, Long userId) {
+    public DocumentSigned signDocument(long documentId, long userId) {
         Optional<User> userOptional = userRepository.findById(userId);
         Optional<Document> documentOptional = documentRepository.findById(documentId);
 

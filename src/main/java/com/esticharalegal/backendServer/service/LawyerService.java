@@ -4,7 +4,8 @@ import com.esticharalegal.backendServer.dto.*;
 import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.mapper.UserMapper;
 import com.esticharalegal.backendServer.model.User;
-import com.esticharalegal.backendServer.model.UserType;
+
+import com.esticharalegal.backendServer.Enum.UserType;
 import com.esticharalegal.backendServer.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -42,7 +43,10 @@ public class LawyerService {
 
     public LawyerDTO register(SignUpLawyerDTO userDto) throws AppException {
         Optional<User> optionalUser = userRepository.findByLicenseNumber(userDto.licenseNumber());
-
+        Optional<User> userNameExist = userRepository.findByUsername(userDto.username());
+        if(userNameExist.isPresent()){
+            throw new AppException("user Name already exists", HttpStatus.BAD_REQUEST);
+        }
         if (optionalUser.isPresent()) {
             throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
         }
@@ -79,17 +83,17 @@ public class LawyerService {
     public void generateResetPasswordToken(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         if (user != null) {
-            // Generate a new random password
+
             String newPassword = generateRandomPassword();
 
-            // Encode the password before saving it to the user
+
             String encodedPassword = passwordEncoder.encode(newPassword);
             user.get().setPassword(encodedPassword);
 
-            // Update user's password in the database
+
             userRepository.save(user.get());
 
-            // Send the new password to the user via email
+
             sendNewPasswordByEmail(user.get().getEmail(), newPassword);
         }
     }

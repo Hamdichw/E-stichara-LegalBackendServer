@@ -27,6 +27,8 @@ public class Chat {
     @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Message> messageList;
+
+
     @ManyToMany
     @JoinTable(
             name = "user_chat",

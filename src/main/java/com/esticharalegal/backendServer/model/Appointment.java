@@ -1,5 +1,6 @@
 package com.esticharalegal.backendServer.model;
 
+import com.esticharalegal.backendServer.Enum.AppointmentType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,8 +12,8 @@ import java.util.Date;
 @NoArgsConstructor
 
 @Entity
-@Table(name = "rendezvous")
-public class Rendezvous {
+@Table(name = "Appointments")
+public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int appointmentID;
@@ -25,14 +26,15 @@ public class Rendezvous {
     @JoinColumn(name = "LawyerID")
     private User lawyer;
 
-    @Column(name = "Date")
-    private Date date;
+    @Column(name = "StartAppointment")
+    private Date start;
 
-    @Column(name = "Time")
-    private Date time;
+    @Column(name = "EndAppointment")
+    private Date end;
 
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "Status")
-    private String status;
+    private AppointmentType status = AppointmentType.Accepted;
 
-    // Getters and setters
 }

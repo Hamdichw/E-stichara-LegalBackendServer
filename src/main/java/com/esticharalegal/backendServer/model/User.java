@@ -1,5 +1,6 @@
 package com.esticharalegal.backendServer.model;
 
+import com.esticharalegal.backendServer.Enum.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -45,8 +46,9 @@ public class User {
     @Size(max = 100)
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "UserType")
-    private UserType role;
+    private UserType role = UserType.CLIENT;
 
     @Column(name = "Specialization")
     private String specialization;
@@ -56,6 +58,7 @@ public class User {
 
     @Column(name = "Bio")
     private String bio;
+
     @Column(name = "Birthday")
     @Temporal(TemporalType.DATE)
     private Date birthday;
@@ -69,7 +72,6 @@ public class User {
     private List<User> connections;
 
     @ManyToMany(mappedBy = "participants")
-    @JsonIgnore
     private List<Chat> chats;
 
     @Transient

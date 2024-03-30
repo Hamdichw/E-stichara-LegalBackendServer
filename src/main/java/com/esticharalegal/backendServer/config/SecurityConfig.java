@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.POST,"ClientAuth/register", "ClientAuth/login").permitAll()
                         .requestMatchers(HttpMethod.POST,"LawyerAuth/register", "LawyerAuth/login", "LawyerAuth/reset").permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
         ;
         return http.build();
     }
