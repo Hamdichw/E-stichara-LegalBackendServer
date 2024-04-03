@@ -1,5 +1,6 @@
 package com.esticharalegal.backendServer.service;
 
+
 import com.esticharalegal.backendServer.dto.*;
 import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.mapper.UserMapper;
@@ -23,7 +24,6 @@ import java.util.Random;
 public class LawyerService {
 
     private  final UserRepository userRepository;
-
 
     private final JavaMailSender javaMailSender;
 
@@ -125,4 +125,13 @@ public class LawyerService {
 
         javaMailSender.send(mailMessage);
     }
+
+
+    //send Code Verification
+    public void generateCodeVerification(String email) {
+            String CodeVerification = generateRandomPassword();
+            sendNewPasswordByEmail(email, CodeVerification);
+    }
+
+
 }

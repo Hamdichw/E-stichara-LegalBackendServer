@@ -7,14 +7,17 @@ import com.esticharalegal.backendServer.dto.CredentialsClientDTO;
 import com.esticharalegal.backendServer.dto.SignUpClientDTO;
 import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.Enum.UserType;
+import com.esticharalegal.backendServer.model.User;
 import com.esticharalegal.backendServer.service.ClientService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 
@@ -54,7 +57,39 @@ public class ClientAuthController {
         return ResponseEntity.ok("Logged out successfully");
     }
     @PostMapping("/reset")
-    public void resetPassword(@RequestParam("email") String email) {
-        clientService.generateResetPasswordToken(email);
+    public ResponseEntity<String> resetPassword(@RequestParam("email") String email) throws AppException {
+
+            clientService.generateResetPasswordToken(email);
+            return ResponseEntity.status(HttpStatus.OK).body("password updated");
+
+
+    }
+
+    @PostMapping("/CodeVerification")
+    public ResponseEntity<String> CodeVerification(@RequestParam("email") String email) {
+        try {
+            String code = clientService.generateCodeVerification(email);
+            return ResponseEntity.ok(code);
+        } catch (Exception e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("InValid Email");
+        }
+    }
+
+    @PostMapping("/{userId}/profile-image")
+    public ResponseEntity<?> updateProfileImage(
+            @PathVariable Long userId,
+            @RequestParam("image") MultipartFile image) {
+        try {
+            clientService.updateProfileImage(userId, image);
+            return ResponseEntity.ok("Profile image updated successfully");
+        } catch (AppException e) {
+            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{userId}")
+    public void updateUser(@PathVariable long userId, @RequestBody User updatedUser) throws AppException {
+       clientService.updateUser(userId, updatedUser);
     }
 }

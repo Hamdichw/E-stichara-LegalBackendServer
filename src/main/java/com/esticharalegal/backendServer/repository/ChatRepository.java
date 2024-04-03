@@ -11,11 +11,11 @@ import java.util.List;
 @Repository
 public interface ChatRepository extends JpaRepository<Chat, Integer> {
 
-    HashSet<Chat> getChatByFirstUserName(String username);
+    HashSet<Chat> getChatByFirstUser(User firstUser);
 
-    HashSet<Chat> getChatBySecondUserName(String username);
+    HashSet<Chat> getChatBySecondUser(User secondUser);
 
-    HashSet<Chat> getChatByFirstUserNameAndSecondUserName(String firstUserName, String secondUserName);
+    HashSet<Chat> getChatByFirstUserAndSecondUser(User firstUser, User secondUser);
 
-    HashSet<Chat> getChatBySecondUserNameAndFirstUserName(String firstUserName, String secondUserName);
+    HashSet<Chat> getChatBySecondUserAndFirstUser(User firstUser, User secondUser);
 }

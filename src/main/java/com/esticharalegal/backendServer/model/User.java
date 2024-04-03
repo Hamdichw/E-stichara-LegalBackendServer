@@ -42,6 +42,10 @@ public class User {
     @Column(name = "Email")
     private String email;
 
+    @Column(name = "PhoneNumber")
+    @Size(max = 8)
+    private String phoneNumber;
+
     @Column(nullable = false)
     @Size(max = 100)
     private String password;
@@ -50,8 +54,8 @@ public class User {
     @Column(name = "UserType")
     private UserType role = UserType.CLIENT;
 
-    @Column(name = "Specialization")
-    private String specialization;
+    @Column(name = "UserInfo")
+    private String userInfo;
 
     @Column(name = "LicenseNumber")
     private String licenseNumber;
@@ -71,8 +75,6 @@ public class User {
     )
     private List<User> connections;
 
-    @ManyToMany(mappedBy = "participants")
-    private List<Chat> chats;
 
     @Transient
     private KeyPair keyPair;

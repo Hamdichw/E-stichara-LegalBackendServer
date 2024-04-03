@@ -3,13 +3,11 @@ package com.esticharalegal.backendServer.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ManyToAny;
 
 import java.util.Date;
-@Data
+
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -18,12 +16,20 @@ public class Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private int id;
-
-    private String senderEmail;
+    @Getter
+    @Setter
+    private String senderName;
+    @Getter
+    @Setter
     private Date time = new Date(System.currentTimeMillis());
+    @Getter
+    @Setter
     private String replymessage;
 
+
+    @Setter
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "chat_id")
     private Chat chat;

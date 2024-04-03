@@ -22,7 +22,7 @@ public class ChatController {
     private ChatService chatService;
 
     @PostMapping("/add")
-    public ResponseEntity<Chat> createChat(@RequestBody Chat chat) {
+    public ResponseEntity<Chat> createChat(@RequestBody Chat chat) throws AppException {
 
         return new ResponseEntity<Chat>(chatService.addChat(chat), HttpStatus.CREATED);
     }
@@ -38,6 +38,20 @@ public class ChatController {
             return new ResponseEntity<List<Chat>>(chatService.findallchats(), HttpStatus.OK);
         } catch (AppException e) {
            return new ResponseEntity("List not found", HttpStatus.CONFLICT);
+        }
+    }
+
+    @GetMapping("/last/message/from/chat/{chatId}")
+    public ResponseEntity<?> getLastMessageInChat(@PathVariable int chatId) {
+        try {
+            Message lastMessage = this.chatService.getLastMessageInChat(chatId);
+            if (lastMessage != null) {
+                return ResponseEntity.ok(lastMessage);
+            } else {
+                return new ResponseEntity("No messages found in the chat", HttpStatus.NOT_FOUND);
+            }
+        } catch (AppException e) {
+            return new ResponseEntity("Chat not found", HttpStatus.NOT_FOUND);
         }
     }
 

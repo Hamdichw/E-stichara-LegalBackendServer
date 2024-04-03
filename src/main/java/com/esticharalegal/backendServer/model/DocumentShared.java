@@ -15,7 +15,7 @@ import java.util.Date;
 public class DocumentShared {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int shareID;
+    private Long shareID;
 
     @ManyToOne
     @JoinColumn(name = "DocumentID")
@@ -26,7 +26,7 @@ public class DocumentShared {
     private User sharedWith;
 
     @Column(name = "SharedDate")
-    private Date sharedDate;
+    private Date sharedDate = new Date(System.currentTimeMillis());;
 
-    // Getters and setters
+
 }

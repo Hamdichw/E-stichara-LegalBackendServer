@@ -16,7 +16,7 @@ import java.util.Date;
 public class DocumentSigned {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int signID;
+    private Long signID;
 
     @ManyToOne
     @JoinColumn(name = "DocumentID")

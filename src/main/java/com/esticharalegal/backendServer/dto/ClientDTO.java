@@ -3,23 +3,43 @@ package com.esticharalegal.backendServer.dto;
 import com.esticharalegal.backendServer.Enum.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jdk.jfr.Frequency;
 import lombok.*;
 
 import java.security.*;
 
-@Data
+
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
 public class ClientDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
     private Long userID;
+
+    @Getter
+    @Setter
     private String firstName;
+    @Getter
+    @Setter
     private String lastName;
+    @Getter
+    @Setter
     private String username;
+    @Getter
+    @Setter
     private String token;
+    @Setter
     private UserType userType;
+    @Getter
+    @Setter
+    private String UserInfo;
+    @Getter
+    @Setter
+    private String phoneNumber;
+    @Getter
+    @Setter
     private String email;
     @JsonIgnore
     @Transient

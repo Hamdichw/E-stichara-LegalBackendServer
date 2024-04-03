@@ -1,5 +1,9 @@
 package com.esticharalegal.backendServer.service;
 
+import com.esticharalegal.backendServer.Enum.UserType;
+import com.esticharalegal.backendServer.dto.LawyerDTO;
+import com.esticharalegal.backendServer.dto.LawyerDetailsDTO;
+import com.esticharalegal.backendServer.mapper.UserMapper;
 import com.esticharalegal.backendServer.model.User;
 import com.esticharalegal.backendServer.repository.TransactionRepository;
 import com.esticharalegal.backendServer.repository.UserRepository;
@@ -10,6 +14,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -17,6 +22,8 @@ public class DashboardService {
     private final UserRepository userRepository;
 
     private final TransactionRepository transactionRepository;
+    private  final UserMapper userMapper;
+
 
     // transations dashboard
     public BigDecimal getCurrentMonthIncome(Long idLawyer) {
@@ -110,5 +117,14 @@ public class DashboardService {
         public void incrementOver40() {
             over40++;
         }
+    }
+
+
+
+    public List<LawyerDetailsDTO> getAllLawyers() {
+        List<User> lawyerUsers = userRepository.findByRole(UserType.LAWYER);
+        return lawyerUsers.stream()
+                .map(userMapper::toLawyerDetailsDto)
+                .collect(Collectors.toList());
     }
 }

@@ -1,5 +1,7 @@
 package com.esticharalegal.backendServer.controller;
 
+import com.esticharalegal.backendServer.dto.LawyerDTO;
+import com.esticharalegal.backendServer.dto.LawyerDetailsDTO;
 import com.esticharalegal.backendServer.service.DashboardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,7 +16,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/dashboard")
+@RequestMapping("/Get")
 public class DashboardController {
     private final DashboardService dashboardService;
 
@@ -71,5 +73,11 @@ public class DashboardController {
            
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/AllLawyers")
+    public ResponseEntity<List<LawyerDetailsDTO>> getAllLawyers() {
+        List<LawyerDetailsDTO> lawyers = dashboardService.getAllLawyers();
+        return new ResponseEntity<>(lawyers, HttpStatus.OK);
     }
 }

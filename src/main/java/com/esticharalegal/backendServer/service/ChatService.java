@@ -12,6 +12,7 @@ import com.esticharalegal.backendServer.repository.MessageRepository;
 import com.esticharalegal.backendServer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
@@ -22,23 +23,32 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ChatService {
-    
+
     private final UserRepository userRepository;
 
     private final ChatRepository chatRepository;
 
     private final MessageRepository messageRepository;
 
-    public Chat addChat(Chat chat) {
-        return chatRepository.save(chat);
+    public Chat addChat(Chat chat) throws AppException {
+        Optional<User> firstuser = userRepository.findByUsername(chat.getFirstUser().getUsername());
+        Optional<User> seconduser = userRepository.findByUsername(chat.getSecondUser().getUsername());
+        if(firstuser.isPresent() && seconduser.isPresent()){
+            chat.setFirstUser(firstuser.get());
+            chat.setSecondUser(seconduser.get());
+             return chatRepository.save(chat);
+        }
+        else {
+            throw  new  AppException("user not exist ",HttpStatus.BAD_REQUEST);
+        }
     }
 
-     
+
     public Message addMessage2(Message message) {
         return messageRepository.save(message);
     }
 
-     
+
     public List<Message> getAllMessagesInChat(int chatId) throws AppException {
         Optional<Chat> chat = chatRepository.findById(chatId);
 
@@ -48,8 +58,23 @@ public class ChatService {
             return chat.get().getMessageList();
         }
     }
+    public Message getLastMessageInChat(int chatId) throws AppException {
+        Optional<Chat> chat = chatRepository.findById(chatId);
 
-     
+        if (chat.isEmpty()) {
+            throw new AppException();
+        } else {
+            List<Message> messageList = chat.get().getMessageList();
+            if (!messageList.isEmpty()) {
+                return messageList.get(messageList.size() - 1); // Get the last message
+            } else {
+                // If the message list is empty, return null or handle as per your requirements
+                return null;
+            }
+        }
+    }
+
+
     public List<Chat> findallchats() throws AppException {
         if (chatRepository.findAll().isEmpty()) {
             throw new AppException();
@@ -60,7 +85,7 @@ public class ChatService {
     }
 
 
-     
+
     public Chat getById(int id) throws AppException {
         Optional<Chat> chatid = chatRepository.findById(id);
         if (chatid.isPresent()) {
@@ -70,57 +95,83 @@ public class ChatService {
         }
     }
 
-     
+
     public HashSet<Chat> getChatByFirstUserName(String username) throws AppException {
-        HashSet<Chat> chat = chatRepository.getChatByFirstUserName(username);
+        Optional<User> user = userRepository.findByUsername(username);
+        if(user.isPresent()){
+            HashSet<Chat> chat = chatRepository.getChatByFirstUser(user.get());
 
-        if (chat.isEmpty()) {
-            throw new AppException();
-        } else {
-            return chat;
+            if (chat.isEmpty()) {
+                throw new AppException("empty chat",HttpStatus.BAD_REQUEST);
+            } else {
+                return chat;
+            }
+        }else{
+            throw new AppException("user doesn't exist", HttpStatus.BAD_REQUEST);
         }
+
     }
 
-     
+
     public HashSet<Chat> getChatBySecondUserName(String username) throws AppException {
-        HashSet<Chat> chat = chatRepository.getChatBySecondUserName(username);
-        if (chat.isEmpty()) {
-            throw new AppException();
-        } else {
-            return chat;
+        Optional<User> user = userRepository.findByUsername(username);
+        if(user.isPresent()){
+            HashSet<Chat> chat = chatRepository.getChatBySecondUser(user.get());
+
+            if (chat.isEmpty()) {
+                throw new AppException("empty chat",HttpStatus.BAD_REQUEST);
+            } else {
+                return chat;
+            }
+        }else{
+            throw new AppException("user doesn't exist", HttpStatus.BAD_REQUEST);
         }
+
     }
 
-     
+
     public HashSet<Chat> getChatByFirstUserNameOrSecondUserName(String username) throws AppException {
-        HashSet<Chat> chat = chatRepository.getChatByFirstUserName(username);
-        HashSet<Chat> chat1 = chatRepository.getChatBySecondUserName(username);
+        Optional<User> user = userRepository.findByUsername(username);
+        if(user.isPresent()){
+            HashSet<Chat> chat = chatRepository.getChatByFirstUser(user.get());
+            HashSet<Chat> chat1 = chatRepository.getChatBySecondUser(user.get());
 
-        chat1.addAll(chat);
+            chat1.addAll(chat);
 
-        if (chat.isEmpty() && chat1.isEmpty()) {
-            throw new AppException();
-        } else if (chat1.isEmpty()) {
-            return chat;
-        } else {
-            return chat1;
+            if (chat.isEmpty() && chat1.isEmpty()) {
+                throw new AppException("empty chat",HttpStatus.BAD_REQUEST);
+            } else if (chat1.isEmpty()) {
+                return chat;
+            } else {
+                return chat1;
+            }
+        }else{
+            throw new AppException("user doesn't exist", HttpStatus.BAD_REQUEST);
         }
+
     }
 
-     
+
     public HashSet<Chat> getChatByFirstUserNameAndSecondUserName(String firstUserName, String secondUserName) throws AppException {
-        HashSet<Chat> chat = chatRepository.getChatByFirstUserNameAndSecondUserName(firstUserName, secondUserName);
-        HashSet<Chat> chat1 = chatRepository.getChatBySecondUserNameAndFirstUserName(firstUserName, secondUserName);
-        if (chat.isEmpty() && chat1.isEmpty()) {
-            throw new AppException();
-        } else if (chat.isEmpty()) {
-            return chat1;
-        } else {
-            return chat;
+        Optional<User> firstuser = userRepository.findByUsername(firstUserName);
+        Optional<User> seconduser = userRepository.findByUsername(secondUserName);
+        if(firstuser.isPresent() && seconduser.isPresent()){
+            HashSet<Chat> chat = chatRepository.getChatByFirstUserAndSecondUser(firstuser.get(), seconduser.get());
+            HashSet<Chat> chat1 = chatRepository.getChatBySecondUserAndFirstUser(firstuser.get(), seconduser.get());
+            if (chat.isEmpty() && chat1.isEmpty()) {
+                throw new AppException();
+            } else if (chat.isEmpty()) {
+                return chat1;
+            } else {
+                return chat;
+            }
+        }else{
+            throw new AppException("user doesn't exist", HttpStatus.BAD_REQUEST);
         }
+
     }
 
-     
+
     public Chat addMessage(Message add, int chatId) throws AppException {
         Optional<Chat> chat=chatRepository.findById(chatId);
         Chat abc=chat.get();

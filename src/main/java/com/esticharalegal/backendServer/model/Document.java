@@ -1,6 +1,7 @@
 package com.esticharalegal.backendServer.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,15 +27,19 @@ public class Document {
 
     @ManyToOne
     @JoinColumn(name = "UploadedBy")
+    @JsonIgnore
     private User uploadedBy;
+
+    @Column(name = "UploadedByUserName")
+    private String UploadedByUserName ;
 
     @Column(name = "UploadDate")
     private LocalDateTime uploadDate;
 
     @Lob
     @Column(columnDefinition = "LONGBLOB")
+    @JsonIgnore
     private byte[] content;
 
 
-    // Getters and setters
 }

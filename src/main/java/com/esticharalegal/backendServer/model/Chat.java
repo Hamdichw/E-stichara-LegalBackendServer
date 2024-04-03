@@ -21,24 +21,20 @@ public class Chat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int chatId;
 
-    private String firstUserName;
-    private String secondUserName;
+
+    @ManyToOne
+    private User firstUser;
+
+
+    @ManyToOne
+    private User secondUser;
 
     @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Message> messageList;
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_chat",
-            joinColumns = @JoinColumn(name = "chat_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
 
-
-    @JsonIgnore
-    private List<User> participants;
 
 
 }

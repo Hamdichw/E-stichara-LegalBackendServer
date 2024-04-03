@@ -1,6 +1,5 @@
 package com.esticharalegal.backendServer.dto;
 
-
 import com.esticharalegal.backendServer.Enum.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -10,42 +9,28 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.security.*;
-
 @Data
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class LawyerDTO {
+public class LawyerDetailsDTO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userID;
     private String firstName;
     private String lastName;
-    private String username;
-    private String token;
-    private UserType userType;
     private String email;
-    private String licenseNumber;
     private String phoneNumber;
     private String UserInfo;
     @JsonIgnore
     @Transient
     private KeyPair keyPair;
-
+    @JsonIgnore
     @Lob // Use @Lob annotation to store large binary data (keys)
     private byte[] publicKey; // Store public key as byte array
-
+    @JsonIgnore
     @Lob
     private byte[] privateKey;
-    public LawyerDTO(String username, String firstName, String lastName, UserType userType, String email,String licenseNumber) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.userType = userType;
-        this.email = email;
-        this.licenseNumber=licenseNumber;
-        generateKeyPair();
-    }
 
 
     private void generateKeyPair() {

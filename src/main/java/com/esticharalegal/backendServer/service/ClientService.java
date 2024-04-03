@@ -11,12 +11,14 @@ import com.esticharalegal.backendServer.model.User;
 import com.esticharalegal.backendServer.Enum.UserType;
 import com.esticharalegal.backendServer.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.mail.javamail.JavaMailSender;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.CharBuffer;
 import java.util.Optional;
@@ -33,6 +35,8 @@ public class ClientService {
     private final PasswordEncoder passwordEncoder;
 
     private  final UserMapper clientMapper;
+
+    private final CloudService cloudService;
 
     public ClientDTO login(CredentialsClientDTO credentialsClientDto) throws AppException {
         User user = userRepository.findByUsername(credentialsClientDto.username())
@@ -69,9 +73,9 @@ public class ClientService {
         return clientMapper.toClientDto(user);
     }
     // Method to generate reset password token and send it to the user
-    public void generateResetPasswordToken(String email) {
+    public void generateResetPasswordToken(String email) throws AppException {
         Optional<User> user = userRepository.findByEmail(email);
-        if (user != null) {
+        if (user.isPresent()) {
 
             String newPassword = generateRandomPassword();
 
@@ -84,6 +88,10 @@ public class ClientService {
 
 
             sendNewPasswordByEmail(user.get().getEmail(), newPassword);
+            throw new AppException("password updated",HttpStatus.OK);
+        }else{
+            throw new AppException("Invalid mail",HttpStatus.OK);
+
         }
     }
     // Method to generate a random password
@@ -107,12 +115,66 @@ public class ClientService {
 
     // Method to send the new password to the user via email
     private void sendNewPasswordByEmail(String email, String newPassword) {
+
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(email);
+            mailMessage.setSubject("Your new password");
+            mailMessage.setText("Your new password is: " + newPassword);
+
+            javaMailSender.send(mailMessage);
+
+
+    }
+    //send Code Verification
+    public String generateCodeVerification(String email) {
+        String CodeVerification = generateRandomPassword();
+        sendCodeVerification(email, CodeVerification);
+        return  CodeVerification;
+    }
+    private void sendCodeVerification(String email, String newPassword) {
+
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(email);
-        mailMessage.setSubject("Your new password");
-        mailMessage.setText("Your new password is: " + newPassword);
+        mailMessage.setSubject("Your Code Verification");
+        mailMessage.setText("Your Code Verification: " + newPassword);
 
         javaMailSender.send(mailMessage);
+
+
+    }
+
+    // Method to update the profile image
+    public void updateProfileImage(Long userId, MultipartFile image) throws AppException {
+        // Retrieve the user from the repository
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isPresent()) {
+            // Upload the image to Cloudinary using CloudService
+            String imageUrl = cloudService.uploadFile(image);
+            // Update the user's profile image URL
+            User user = optionalUser.get();
+            user.setProfileImage(imageUrl);
+            userRepository.save(user);
+        } else {
+            // Handle case where user is not found
+            throw new AppException("User not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    public void updateUser(long userId, User updatedUser) throws AppException {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found with id: " + userId,HttpStatus.BAD_REQUEST));
+        if(updatedUser.getPassword() != null){
+            updatedUser.setPassword(passwordEncoder.encode(CharBuffer.wrap(updatedUser.getPassword())));
+            BeanUtils.copyProperties(updatedUser, existingUser, "userID","connections", "keyPair", "publicKey", "privateKey");
+
+        }else{
+            BeanUtils.copyProperties(updatedUser, existingUser, "userID","password" ,"connections", "keyPair", "publicKey", "privateKey");
+
+        }
+        // Save and return updated user
+         userRepository.save(existingUser);
+         throw new AppException( "Upadated Successfuly", HttpStatus.OK);
     }
 }
 

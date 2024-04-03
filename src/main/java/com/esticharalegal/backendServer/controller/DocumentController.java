@@ -1,5 +1,6 @@
 package com.esticharalegal.backendServer.controller;
 
+import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.model.Document;
 import com.esticharalegal.backendServer.service.DocumentService;
 import lombok.AllArgsConstructor;
@@ -138,5 +139,10 @@ public class DocumentController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @PostMapping("/shareMyDocument")
+    public void ShareMyDocument(@RequestParam("docId") String docId, @RequestParam("userId") String userId) throws AppException {
+        documentService.ShareDocument(docId,userId);
     }
 }

@@ -1,9 +1,6 @@
 package com.esticharalegal.backendServer.mapper;
 
-import com.esticharalegal.backendServer.dto.ClientDTO;
-import com.esticharalegal.backendServer.dto.LawyerDTO;
-import com.esticharalegal.backendServer.dto.SignUpClientDTO;
-import com.esticharalegal.backendServer.dto.SignUpLawyerDTO;
+import com.esticharalegal.backendServer.dto.*;
 import com.esticharalegal.backendServer.model.User;
 
 
@@ -21,6 +18,8 @@ public interface UserMapper {
     User signUpToUser(SignUpClientDTO signUpClientDto);
 
     LawyerDTO toLawyerDto(User user);
+
+    LawyerDetailsDTO toLawyerDetailsDto(User user);
     @Mapping(target = "password", ignore = true)
     User signUpToUser(SignUpLawyerDTO signUpLawyerDTO);
 
