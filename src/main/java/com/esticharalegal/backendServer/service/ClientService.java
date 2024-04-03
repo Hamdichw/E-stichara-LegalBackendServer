@@ -144,9 +144,12 @@ public class ClientService {
     }
 
     // Method to update the profile image
-    public void updateProfileImage(Long userId, MultipartFile image) throws AppException {
+    public String updateProfileImage(Long userId, MultipartFile image) throws AppException {
         // Retrieve the user from the repository
         Optional<User> optionalUser = userRepository.findById(userId);
+        if(image.isEmpty()){
+            throw new AppException("Empty file",HttpStatus.BAD_REQUEST);
+        }
         if (optionalUser.isPresent()) {
             // Upload the image to Cloudinary using CloudService
             String imageUrl = cloudService.uploadFile(image);
@@ -154,6 +157,7 @@ public class ClientService {
             User user = optionalUser.get();
             user.setProfileImage(imageUrl);
             userRepository.save(user);
+            return  imageUrl;
         } else {
             // Handle case where user is not found
             throw new AppException("User not found", HttpStatus.NOT_FOUND);

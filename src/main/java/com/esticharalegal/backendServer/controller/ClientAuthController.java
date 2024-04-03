@@ -81,10 +81,10 @@ public class ClientAuthController {
             @PathVariable Long userId,
             @RequestParam("image") MultipartFile image) {
         try {
-            clientService.updateProfileImage(userId, image);
-            return ResponseEntity.ok("Profile image updated successfully");
+            String url  = clientService.updateProfileImage(userId, image);
+            return ResponseEntity.ok(url);
         } catch (AppException e) {
-            return ResponseEntity.status(e.getStatus()).body(e.getMessage());
+            return ResponseEntity.status(e.getStatus()).body("Empty file");
         }
     }
 
