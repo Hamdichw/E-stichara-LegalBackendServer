@@ -4,10 +4,7 @@ package com.esticharalegal.backendServer.dto;
 import com.esticharalegal.backendServer.Enum.UserType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.security.*;
 
@@ -28,6 +25,7 @@ public class LawyerDTO {
     private String licenseNumber;
     private String phoneNumber;
     private String UserInfo;
+    private String profileImage;
     @JsonIgnore
     @Transient
     private KeyPair keyPair;

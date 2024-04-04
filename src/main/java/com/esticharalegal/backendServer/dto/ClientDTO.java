@@ -41,6 +41,11 @@ public class ClientDTO {
     @Getter
     @Setter
     private String email;
+
+    @Getter
+    @Setter
+    private String profileImage;
+
     @JsonIgnore
     @Transient
     private KeyPair keyPair;

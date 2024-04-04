@@ -178,7 +178,7 @@ public class ClientService {
         }
         // Save and return updated user
          userRepository.save(existingUser);
-         throw new AppException( "Upadated Successfuly", HttpStatus.OK);
+         throw new AppException( "Updated Successfully", HttpStatus.OK);
     }
 }
 
