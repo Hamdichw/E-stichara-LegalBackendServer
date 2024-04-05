@@ -36,7 +36,7 @@ public class User {
     private String username;
 
 
-    @Column(name = "profile_image", columnDefinition = "VARCHAR(255) DEFAULT 'https://th.bing.com/th/id/R.578e62715eaa62d3979fc72d09ff2807?rik=zwnZbhfC%2f%2bEdFw&riu=http%3a%2f%2fwww.baytekent.com%2fwp-content%2fuploads%2f2016%2f12%2ffacebook-default-no-profile-pic1.jpg&ehk=MKVbuUiOWCQ4f7d%2fTknilYnrg4IyIHs54kQO1mxHX2E%3d&risl=&pid=ImgRaw&r=0'")
+    @Column(name = "profile_image")
     private String profileImage;
 
     @Column(name = "Email")
