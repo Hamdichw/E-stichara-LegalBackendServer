@@ -55,14 +55,7 @@ public class ClientDTO {
 
     @Lob
     private byte[] privateKey;
-    public ClientDTO(String username, String firstName, String lastName, UserType userType, String email) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.userType = userType;
-        this.email = email;
-        generateKeyPair();
-    }
+
 
 
     private void generateKeyPair() {
