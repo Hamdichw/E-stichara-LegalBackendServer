@@ -20,6 +20,7 @@ import java.net.URI;
 
 @AllArgsConstructor
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/LawyerAuth")
 public class LawyerAuthController {
     private final LawyerService lawyerService;
