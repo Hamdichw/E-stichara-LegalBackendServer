@@ -24,11 +24,11 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userID;
 
-    @Column(name = "firstName", nullable = false)
+    @Column(name = "firstName")
     @Size(max = 100)
     private String firstName;
 
-    @Column(name = "lastName", nullable = false)
+    @Column(name = "lastName")
     @Size(max = 100)
     private String lastName;
 
@@ -47,7 +47,6 @@ public class User {
     @Size(max = 8)
     private String phoneNumber;
 
-    @Column(nullable = false)
     @Size(max = 100)
     private String password;
 
