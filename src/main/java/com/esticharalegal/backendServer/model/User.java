@@ -42,6 +42,9 @@ public class User {
     @Column(name = "Email")
     private String email;
 
+    @Column(name = "address")
+    private String address;
+
     @Column(name = "PhoneNumber")
     @Size(max = 8)
     private String phoneNumber;
