@@ -172,10 +172,10 @@ public class ClientService {
             updatedUser.setPassword(passwordEncoder.encode(CharBuffer.wrap(updatedUser.getPassword())));
             BeanUtils.copyProperties(updatedUser, existingUser, "userID","connections", "keyPair", "publicKey", "privateKey");
 
-        }else{
+        }
             BeanUtils.copyProperties(updatedUser, existingUser, "userID","password" ,"connections", "keyPair", "publicKey", "privateKey");
 
-        }
+
         // Save and return updated user
          userRepository.save(existingUser);
          throw new AppException( "Updated Successfully", HttpStatus.OK);
