@@ -23,6 +23,7 @@ import java.net.URI;
 
 @AllArgsConstructor
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/ClientAuth")
 public class ClientAuthController {
 
