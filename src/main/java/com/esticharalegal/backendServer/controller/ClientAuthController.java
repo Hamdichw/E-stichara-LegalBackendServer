@@ -90,7 +90,7 @@ public class ClientAuthController {
     }
 
     @PutMapping("/{userId}")
-    public void updateUser(@PathVariable long userId, @RequestBody User updatedUser) throws AppException {
-       clientService.updateUser(userId, updatedUser);
+    public ResponseEntity<User>  updateUser(@PathVariable long userId, @RequestBody User updatedUser) throws AppException {
+       return  ResponseEntity.ok(clientService.updateUser(userId, updatedUser));
     }
 }

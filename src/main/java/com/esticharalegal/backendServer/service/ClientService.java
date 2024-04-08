@@ -165,7 +165,7 @@ public class ClientService {
     }
 
 
-    public void updateUser(long userId, User updatedUser) throws AppException {
+    public User updateUser(long userId, User updatedUser) throws AppException {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found with id: " + userId,HttpStatus.BAD_REQUEST));
         if(updatedUser.getPassword() != null){
@@ -176,8 +176,7 @@ public class ClientService {
 
 
         // Save and return updated user
-         userRepository.save(existingUser);
-         throw new AppException( "Updated Successfully", HttpStatus.OK);
+        return  userRepository.save(existingUser);
     }
 }
 
