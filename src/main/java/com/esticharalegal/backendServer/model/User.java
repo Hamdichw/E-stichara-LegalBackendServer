@@ -37,7 +37,6 @@ public class User {
 
 
     @Column(name = "profile_image")
-    @Size(min = 255)
     private String profileImage;
 
     @Column(name = "Email")
