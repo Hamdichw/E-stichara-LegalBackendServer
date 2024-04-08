@@ -24,6 +24,7 @@ public class LawyerDTO {
     private String email;
     private String licenseNumber;
     private String phoneNumber;
+    private String address;
     private String bio;
     private String profileImage;
     @JsonIgnore

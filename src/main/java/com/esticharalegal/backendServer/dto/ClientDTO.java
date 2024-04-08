@@ -34,6 +34,9 @@ public class ClientDTO {
     private UserType userType;
     @Getter
     @Setter
+    private String address;
+    @Getter
+    @Setter
     private String bio;
     @Getter
     @Setter
