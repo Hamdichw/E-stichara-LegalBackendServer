@@ -21,7 +21,7 @@ public class LawyerDetailsDTO {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private String UserInfo;
+    private String bio;
     @JsonIgnore
     @Transient
     private KeyPair keyPair;

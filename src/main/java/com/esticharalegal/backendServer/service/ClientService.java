@@ -165,18 +165,23 @@ public class ClientService {
     }
 
 
-    public User updateUser(long userId, User updatedUser) throws AppException {
+    public ClientDTO updateUser(long userId, User updatedUser) throws AppException {
         User existingUser = userRepository.findById(userId)
                 .orElseThrow(() -> new AppException("User not found with id: " + userId,HttpStatus.BAD_REQUEST));
         if(updatedUser.getPassword() != null){
             updatedUser.setPassword(passwordEncoder.encode(CharBuffer.wrap(updatedUser.getPassword())));
+            BeanUtils.copyProperties(updatedUser, existingUser, "userID" ,"connections", "keyPair", "publicKey", "privateKey","profileImage");
+
+        }else{
+            BeanUtils.copyProperties(updatedUser, existingUser, "userID","password" ,"connections", "keyPair", "publicKey", "privateKey","profileImage");
 
         }
-            BeanUtils.copyProperties(updatedUser, existingUser, "userID","password" ,"connections", "keyPair", "publicKey", "privateKey");
 
 
         // Save and return updated user
-        return  userRepository.save(existingUser);
+        User savedUser =  userRepository.save(existingUser);
+        return clientMapper.toClientDto(savedUser);
+
     }
 }
 

@@ -53,8 +53,7 @@ public class User {
     @Column(name = "UserType")
     private UserType role = UserType.CLIENT;
 
-    @Column(name = "UserInfo")
-    private String userInfo;
+
 
     @Column(name = "LicenseNumber")
     private String licenseNumber;
