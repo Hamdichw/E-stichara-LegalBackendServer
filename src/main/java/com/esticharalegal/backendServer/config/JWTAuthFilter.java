@@ -34,9 +34,9 @@ public class JWTAuthFilter extends OncePerRequestFilter {
                                 userAuthenticationProvider.validateToken(authElements[1]));
                     } else {
                         SecurityContextHolder.getContext().setAuthentication(
-                                userAuthenticationProvider.validateTokenStrongly(authElements[1]));
+                                userAuthenticationProvider.validateToken(authElements[1]));
                     }
-                } catch (RuntimeException | AppException e) {
+                } catch (RuntimeException e) {
                     SecurityContextHolder.clearContext();
                 }
             }
