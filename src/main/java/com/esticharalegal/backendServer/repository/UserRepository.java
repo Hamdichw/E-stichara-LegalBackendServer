@@ -16,4 +16,6 @@ public interface UserRepository  extends JpaRepository<User, Long> {
 
     List<User> findByRole(UserType role);
 
-}
+
+    Optional<User> findByLicenseNumberAndAndEmail(String licenseNumber ,String email);
+ }

@@ -32,7 +32,7 @@ public class LawyerService {
     private  final UserMapper lawyerMapper;
 
     public LawyerDTO login(CredentialsLawyerDTO credentialsLawyerDTO) throws AppException {
-        User user = userRepository.findByEmail(credentialsLawyerDTO.email())
+        User user = userRepository.findByLicenseNumberAndAndEmail(credentialsLawyerDTO.licenseNumber() , credentialsLawyerDTO.email())
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
 
         if (passwordEncoder.matches(CharBuffer.wrap(credentialsLawyerDTO.password()), user.getPassword())) {
