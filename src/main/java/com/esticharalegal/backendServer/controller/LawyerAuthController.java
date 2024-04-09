@@ -4,6 +4,7 @@ import com.esticharalegal.backendServer.config.UserAuthenticationProvider;
 import com.esticharalegal.backendServer.dto.*;
 import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.Enum.UserType;
+import com.esticharalegal.backendServer.model.User;
 import com.esticharalegal.backendServer.service.LawyerService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -62,7 +63,20 @@ public class LawyerAuthController {
     public void resetPassword(@RequestParam("email") String email) {
         lawyerService.generateResetPasswordToken(email);
     }
+    @PostMapping("/{userId}/profile-image")
+    public ResponseEntity<?> updateProfileImage(
+            @PathVariable Long userId,
+            @RequestParam("image") MultipartFile image) {
+        try {
+            String url  = lawyerService.updateProfileImage(userId, image);
+            return ResponseEntity.ok(url);
+        } catch (AppException e) {
+            return ResponseEntity.status(e.getStatus()).body("Empty file");
+        }
+    }
 
-
-
+    @PutMapping("/{userId}")
+    public ResponseEntity<LawyerDTO> updateUser(@PathVariable long userId, @RequestBody User updatedUser) throws AppException {
+        return  ResponseEntity.ok(lawyerService.updateUser(userId, updatedUser));
+    }
 }

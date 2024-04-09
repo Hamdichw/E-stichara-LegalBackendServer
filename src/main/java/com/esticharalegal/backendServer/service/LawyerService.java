@@ -9,11 +9,13 @@ import com.esticharalegal.backendServer.model.User;
 import com.esticharalegal.backendServer.Enum.UserType;
 import com.esticharalegal.backendServer.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.CharBuffer;
 import java.util.Optional;
@@ -30,6 +32,9 @@ public class LawyerService {
     private final PasswordEncoder passwordEncoder;
 
     private  final UserMapper lawyerMapper;
+
+    private final CloudService cloudService;
+
 
     public LawyerDTO login(CredentialsLawyerDTO credentialsLawyerDTO) throws AppException {
         User user = userRepository.findByLicenseNumberAndEmail(credentialsLawyerDTO.licenseNumber() , credentialsLawyerDTO.email())
@@ -133,5 +138,42 @@ public class LawyerService {
             sendNewPasswordByEmail(email, CodeVerification);
     }
 
+    public String updateProfileImage(Long userId, MultipartFile image) throws AppException {
+        // Retrieve the user from the repository
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(image.isEmpty()){
+            throw new AppException("Empty file",HttpStatus.BAD_REQUEST);
+        }
+        if (optionalUser.isPresent()) {
+            // Upload the image to Cloudinary using CloudService
+            String imageUrl = cloudService.uploadFile(image);
+            // Update the user's profile image URL
+            User user = optionalUser.get();
+            user.setProfileImage(imageUrl);
+            userRepository.save(user);
+            return  imageUrl;
+        } else {
+            // Handle case where user is not found
+            throw new AppException("User not found", HttpStatus.NOT_FOUND);
+        }
+    }
+    public LawyerDTO updateUser(long userId, User updatedUser) throws AppException {
+        User existingUser = userRepository.findById(userId)
+                .orElseThrow(() -> new AppException("User not found with id: " + userId,HttpStatus.BAD_REQUEST));
+        if(updatedUser.getPassword() != null){
+            updatedUser.setPassword(passwordEncoder.encode(CharBuffer.wrap(updatedUser.getPassword())));
+            BeanUtils.copyProperties(updatedUser, existingUser, "userID" ,"connections", "keyPair", "publicKey", "privateKey","profileImage","role");
+
+        }else{
+            BeanUtils.copyProperties(updatedUser, existingUser, "userID","password" ,"connections", "keyPair", "publicKey", "privateKey","profileImage","role");
+
+        }
+
+
+        // Save and return updated user
+        User savedUser =  userRepository.save(existingUser);
+        return lawyerMapper.toLawyerDto(savedUser);
+
+    }
 
 }
