@@ -3,7 +3,6 @@ package com.esticharalegal.backendServer.controller;
 import com.esticharalegal.backendServer.config.UserAuthenticationProvider;
 import com.esticharalegal.backendServer.dto.*;
 import com.esticharalegal.backendServer.exceptions.AppException;
-import com.esticharalegal.backendServer.Enum.UserType;
 import com.esticharalegal.backendServer.model.User;
 import com.esticharalegal.backendServer.service.LawyerService;
 import jakarta.servlet.http.Cookie;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.net.URI;
 
 @AllArgsConstructor
@@ -64,15 +62,15 @@ public class LawyerAuthController {
         lawyerService.generateResetPasswordToken(email);
     }
     @PostMapping("/{userId}/profile-image")
-    public ResponseEntity<?> updateProfileImage(
+    public ResponseEntity<String> updateProfileImage(
             @PathVariable Long userId,
             @RequestParam("image") MultipartFile image) {
         try {
-            String url  = lawyerService.updateProfileImage(userId, image);
-            return ResponseEntity.ok(url);
+            lawyerService.updateProfileImage(userId, image);
         } catch (AppException e) {
             return ResponseEntity.status(e.getStatus()).body("Empty file");
         }
+        return null;
     }
 
     @PutMapping("/{userId}")

@@ -138,7 +138,7 @@ public class LawyerService {
             sendNewPasswordByEmail(email, CodeVerification);
     }
 
-    public String updateProfileImage(Long userId, MultipartFile image) throws AppException {
+    public void updateProfileImage(Long userId, MultipartFile image) throws AppException {
         // Retrieve the user from the repository
         Optional<User> optionalUser = userRepository.findById(userId);
         if(image.isEmpty()){
@@ -151,7 +151,8 @@ public class LawyerService {
             User user = optionalUser.get();
             user.setProfileImage(imageUrl);
             userRepository.save(user);
-            return  imageUrl;
+            throw new AppException(imageUrl, HttpStatus.OK);
+
         } else {
             // Handle case where user is not found
             throw new AppException("User not found", HttpStatus.NOT_FOUND);
@@ -164,7 +165,7 @@ public class LawyerService {
             updatedUser.setPassword(passwordEncoder.encode(CharBuffer.wrap(updatedUser.getPassword())));
             BeanUtils.copyProperties(updatedUser, existingUser, "userID" ,"connections", "keyPair", "publicKey", "privateKey","profileImage","role");
 
-        }else{
+        }else {
             BeanUtils.copyProperties(updatedUser, existingUser, "userID","password" ,"connections", "keyPair", "publicKey", "privateKey","profileImage","role");
 
         }
