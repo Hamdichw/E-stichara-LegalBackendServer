@@ -61,16 +61,14 @@ public class LawyerAuthController {
     public void resetPassword(@RequestParam("email") String email) {
         lawyerService.generateResetPasswordToken(email);
     }
+
     @PostMapping("/{userId}/profile-image")
-    public ResponseEntity<String> updateProfileImage(
+    public void updateProfileImage(
             @PathVariable Long userId,
-            @RequestParam("image") MultipartFile image) {
-        try {
-            lawyerService.updateProfileImage(userId, image);
-        } catch (AppException e) {
-            return ResponseEntity.status(e.getStatus()).body("Empty file");
-        }
-        return null;
+            @RequestParam("image") MultipartFile image) throws AppException {
+
+        lawyerService.updateProfileImage(userId, image);
+
     }
 
     @PutMapping("/{userId}")
