@@ -20,7 +20,6 @@ public class LawyerDTO {
     private String lastName;
     private String username;
     private String token;
-    private UserType userType;
     private String email;
     private String licenseNumber;
     private String phoneNumber;
