@@ -36,15 +36,7 @@ public class LawyerDTO {
 
     @Lob
     private byte[] privateKey;
-    public LawyerDTO(String username, String firstName, String lastName, UserType userType, String email,String licenseNumber) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.userType = userType;
-        this.email = email;
-        this.licenseNumber=licenseNumber;
-        generateKeyPair();
-    }
+
 
 
     private void generateKeyPair() {

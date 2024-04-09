@@ -7,6 +7,7 @@ import jdk.jfr.Frequency;
 import lombok.*;
 
 import java.security.*;
+import java.util.Date;
 
 
 @NoArgsConstructor
@@ -44,10 +45,13 @@ public class ClientDTO {
     @Getter
     @Setter
     private String email;
-
     @Getter
     @Setter
     private String profileImage;
+    @Getter
+    @Setter
+    @Temporal(TemporalType.DATE)
+    private Date birthday;
 
     @JsonIgnore
     @Transient

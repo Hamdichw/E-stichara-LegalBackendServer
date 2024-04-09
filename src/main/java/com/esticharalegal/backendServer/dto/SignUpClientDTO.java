@@ -1,7 +1,11 @@
 package com.esticharalegal.backendServer.dto;
 
 
-public record SignUpClientDTO(String firstName, String lastName, String email, String username,String password)
+import lombok.Data;
+
+import java.util.Date;
+
+public record SignUpClientDTO(String firstName, String lastName, String email, String username, String password , String phoneNumber , Date birthday)
 {
 
 }

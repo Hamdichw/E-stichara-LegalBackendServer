@@ -39,7 +39,7 @@ public class ClientService {
     private final CloudService cloudService;
 
     public ClientDTO login(CredentialsClientDTO credentialsClientDto) throws AppException {
-        User user = userRepository.findByUsername(credentialsClientDto.username())
+        User user = userRepository.findByEmail(credentialsClientDto.email())
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
 
         if (passwordEncoder.matches(CharBuffer.wrap(credentialsClientDto.password()), user.getPassword())) {
