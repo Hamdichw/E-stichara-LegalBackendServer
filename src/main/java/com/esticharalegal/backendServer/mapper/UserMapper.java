@@ -17,6 +17,8 @@ public interface UserMapper {
 
     User signUpToUser(SignUpClientDTO signUpClientDto);
 
+
+    User credentialsGoogleToUser(CredentialsGoogle credentialsGoogle);
     LawyerDTO toLawyerDto(User user);
 
     LawyerDetailsDTO toLawyerDetailsDto(User user);

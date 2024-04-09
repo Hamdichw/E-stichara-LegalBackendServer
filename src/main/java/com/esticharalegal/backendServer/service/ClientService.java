@@ -4,6 +4,7 @@ package com.esticharalegal.backendServer.service;
 
 import com.esticharalegal.backendServer.dto.ClientDTO;
 import com.esticharalegal.backendServer.dto.CredentialsClientDTO;
+import com.esticharalegal.backendServer.dto.CredentialsGoogle;
 import com.esticharalegal.backendServer.dto.SignUpClientDTO;
 import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.mapper.UserMapper;
@@ -37,6 +38,17 @@ public class ClientService {
     private  final UserMapper clientMapper;
 
     private final CloudService cloudService;
+
+    public ClientDTO loginGoogle(CredentialsGoogle credentialsGoogle)throws  AppException{
+        Optional<User> user = userRepository.findByEmailAndUsernameAndFirstNameAndLastName(credentialsGoogle.username(),credentialsGoogle.username(),credentialsGoogle.firstName(),credentialsGoogle.lastName());
+        if(user.isPresent()){
+            return clientMapper.toClientDto(user.get());
+        }else{
+            userRepository.save(clientMapper.credentialsGoogleToUser(credentialsGoogle));
+            return clientMapper.toClientDto(clientMapper.credentialsGoogleToUser(credentialsGoogle));
+        }
+    }
+
 
     public ClientDTO login(CredentialsClientDTO credentialsClientDto) throws AppException {
         User user = userRepository.findByEmail(credentialsClientDto.email())

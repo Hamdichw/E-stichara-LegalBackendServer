@@ -4,6 +4,7 @@ package com.esticharalegal.backendServer.controller;
 import com.esticharalegal.backendServer.config.UserAuthenticationProvider;
 import com.esticharalegal.backendServer.dto.ClientDTO;
 import com.esticharalegal.backendServer.dto.CredentialsClientDTO;
+import com.esticharalegal.backendServer.dto.CredentialsGoogle;
 import com.esticharalegal.backendServer.dto.SignUpClientDTO;
 import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.Enum.UserType;
@@ -34,7 +35,17 @@ public class ClientAuthController {
     public ResponseEntity<ClientDTO> login(@RequestBody @Valid CredentialsClientDTO credentialsClientDto, HttpServletResponse response) throws AppException {
         ClientDTO clientDto = clientService.login(credentialsClientDto);
         clientDto.setToken(userAuthenticationProvider.createToken(clientDto));
-        clientDto.setUserType(UserType.LAWYER);
+        Cookie cookie = new Cookie("token", clientDto.getToken());
+        cookie.setPath("/");
+        cookie.setMaxAge(3600); // set cookie expiration time in seconds, adjust as needed
+        response.addCookie(cookie);
+        return ResponseEntity.ok(clientDto);
+    }
+
+    @PostMapping("/loginGoogle")
+    public ResponseEntity<ClientDTO> loginGoogle(@RequestBody @Valid CredentialsGoogle credentialsGoogle, HttpServletResponse response) throws AppException {
+        ClientDTO clientDto = clientService.loginGoogle(credentialsGoogle);
+        clientDto.setToken(userAuthenticationProvider.createToken(clientDto));
         Cookie cookie = new Cookie("token", clientDto.getToken());
         cookie.setPath("/");
         cookie.setMaxAge(3600); // set cookie expiration time in seconds, adjust as needed
