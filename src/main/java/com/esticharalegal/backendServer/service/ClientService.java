@@ -44,8 +44,11 @@ public class ClientService {
         if(user.isPresent()){
             return clientMapper.toClientDto(user.get());
         }else{
-            userRepository.save(clientMapper.credentialsGoogleToUser(credentialsGoogle));
-            return clientMapper.toClientDto(clientMapper.credentialsGoogleToUser(credentialsGoogle));
+            User newUser = clientMapper.credentialsGoogleToUser(credentialsGoogle);
+            newUser.generateKeyPair();
+            newUser.setRole(UserType.CLIENT);
+            User savedUser = userRepository.save(newUser);
+            return clientMapper.toClientDto(savedUser);
         }
     }
 
