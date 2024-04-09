@@ -40,7 +40,7 @@ public class ClientService {
     private final CloudService cloudService;
 
     public ClientDTO loginGoogle(CredentialsGoogle credentialsGoogle)throws  AppException{
-        Optional<User> user = userRepository.findByEmailAndUsernameAndFirstNameAndLastName(credentialsGoogle.username(),credentialsGoogle.username(),credentialsGoogle.firstName(),credentialsGoogle.lastName());
+        Optional<User> user = userRepository.findByEmail(credentialsGoogle.email());
         if(user.isPresent()){
             return clientMapper.toClientDto(user.get());
         }else{
@@ -50,6 +50,7 @@ public class ClientService {
             User savedUser = userRepository.save(newUser);
             return clientMapper.toClientDto(savedUser);
         }
+
     }
 
 
