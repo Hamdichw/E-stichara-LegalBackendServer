@@ -186,10 +186,10 @@ public class ClientService {
                 .orElseThrow(() -> new AppException("User not found with id: " + userId,HttpStatus.BAD_REQUEST));
         if(updatedUser.getPassword() != null){
             updatedUser.setPassword(passwordEncoder.encode(CharBuffer.wrap(updatedUser.getPassword())));
-            BeanUtils.copyProperties(updatedUser, existingUser, "userID" ,"connections", "keyPair", "publicKey", "privateKey","profileImage");
+            BeanUtils.copyProperties(updatedUser, existingUser, "userID" ,"connections", "keyPair", "publicKey", "privateKey","profileImage","role");
 
         }else{
-            BeanUtils.copyProperties(updatedUser, existingUser, "userID","password" ,"connections", "keyPair", "publicKey", "privateKey","profileImage");
+            BeanUtils.copyProperties(updatedUser, existingUser, "userID","password" ,"connections", "keyPair", "publicKey", "privateKey","profileImage","role");
 
         }
 

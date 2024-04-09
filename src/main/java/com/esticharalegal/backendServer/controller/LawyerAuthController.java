@@ -41,7 +41,6 @@ public class LawyerAuthController {
     public ResponseEntity<LawyerDTO> register(@RequestBody @Valid SignUpLawyerDTO user) throws AppException {
         LawyerDTO createdUser = lawyerService.register(user);
         createdUser.setToken(userAuthenticationProvider.createToken(createdUser));
-        createdUser.setUserType(UserType.LAWYER);
         return ResponseEntity.created(URI.create("/users/" + createdUser.getUserID())).body(createdUser);
     }
     @PostMapping("/logout")
