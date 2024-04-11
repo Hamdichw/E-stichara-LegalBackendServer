@@ -87,9 +87,7 @@ public class LawyerService {
 
     public List<ClientDetailsDTO> getAllConnectionsByLawyerId(Long id){
         Optional<User> user = userRepository.findById(id);
-            if(user.isPresent()) {
-                lawyerMapper.toClientDetailsDTO(user.get().getConnections());
-            }
+        user.ifPresent(value -> lawyerMapper.toClientDetailsDTO(value.getConnections()));
             return null;
 
     }
