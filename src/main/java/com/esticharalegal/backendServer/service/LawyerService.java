@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -87,9 +88,13 @@ public class LawyerService {
 
     public List<ClientDetailsDTO> getAllConnectionsByLawyerId(Long id){
         Optional<User> user = userRepository.findById(id);
-        user.ifPresent(value -> lawyerMapper.toClientDetailsDTO(value.getConnections()));
-            return null;
-
+        if (user.isPresent()) {
+            List<User> connections = user.get().getConnections();
+            return connections.stream()
+                    .map(lawyerMapper::toClientDetailsDTO)
+                    .collect(Collectors.toList());
+        }
+        return null;
     }
 
 
