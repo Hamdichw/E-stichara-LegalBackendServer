@@ -7,6 +7,7 @@ import com.esticharalegal.backendServer.model.User;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 
 @Mapper(componentModel = "spring")
@@ -25,4 +26,11 @@ public interface UserMapper {
     @Mapping(target = "password", ignore = true)
     User signUpToUser(SignUpLawyerDTO signUpLawyerDTO);
 
+    @Mapping(target = "password", qualifiedByName = "passwordToBoolean")
+    ClientDetailsDTO toClientDetailsDTO(User user);
+
+    @Named("passwordToBoolean")
+    default boolean passwordToBoolean(String password) {
+        return password != null;
+    }
 }

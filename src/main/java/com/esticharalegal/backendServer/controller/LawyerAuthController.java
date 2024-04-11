@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
+import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -56,6 +57,15 @@ public class LawyerAuthController {
         lawyerService.addConnection(userId, connectionUserId);
         return ResponseEntity.status(HttpStatus.CREATED).body("Connection added successfully");
     }
+    @GetMapping("/{userId}/connections")
+    public ResponseEntity<List<User>> getAllConnectionsByUserId(@PathVariable("userId") long userId) {
+        List<User> connections = lawyerService.getAllConnectionsByLawyerId(userId);
+        if (connections != null) {
+            return new ResponseEntity<>(connections, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    };
 
     @PostMapping("/reset")
     public void resetPassword(@RequestParam("email") String email) {

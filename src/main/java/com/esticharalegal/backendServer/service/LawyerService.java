@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.CharBuffer;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -81,6 +83,11 @@ public class LawyerService {
             userRepository.save(userEntity);
             userRepository.save(connectionUserEntity);
         }
+    }
+
+    public List<User> getAllConnectionsByLawyerId(Long id){
+        Optional<User> user = userRepository.findById(id);
+        return user.map(User::getConnections).orElse(null);
     }
 
 
