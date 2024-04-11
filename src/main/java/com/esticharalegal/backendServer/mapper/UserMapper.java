@@ -29,7 +29,7 @@ public interface UserMapper {
     User signUpToUser(SignUpLawyerDTO signUpLawyerDTO);
 
     @Mapping(target = "password", qualifiedByName = "passwordToBoolean")
-    List<ClientDetailsDTO> toClientDetailsDTO(List<User> connections);
+    void toClientDetailsDTO(List<User> connections);
 
     @Named("passwordToBoolean")
     default boolean passwordToBoolean(String password) {
