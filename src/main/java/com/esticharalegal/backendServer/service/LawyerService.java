@@ -85,9 +85,13 @@ public class LawyerService {
         }
     }
 
-    public List<User> getAllConnectionsByLawyerId(Long id){
+    public List<ClientDetailsDTO> getAllConnectionsByLawyerId(Long id){
         Optional<User> user = userRepository.findById(id);
-        return user.map(User::getConnections).orElse(null);
+            if(user.isPresent()) {
+                lawyerMapper.toClientDetailsDTO(user.get().getConnections());
+            }
+            return null;
+
     }
 
 

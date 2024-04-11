@@ -9,6 +9,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
+import java.util.List;
+
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
@@ -27,7 +29,7 @@ public interface UserMapper {
     User signUpToUser(SignUpLawyerDTO signUpLawyerDTO);
 
     @Mapping(target = "password", qualifiedByName = "passwordToBoolean")
-    ClientDetailsDTO toClientDetailsDTO(User user);
+    List<ClientDetailsDTO> toClientDetailsDTO(List<User> connections);
 
     @Named("passwordToBoolean")
     default boolean passwordToBoolean(String password) {

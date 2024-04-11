@@ -58,8 +58,8 @@ public class LawyerAuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Connection added successfully");
     }
     @GetMapping("/{userId}/connections")
-    public ResponseEntity<List<User>> getAllConnectionsByUserId(@PathVariable("userId") long userId) {
-        List<User> connections = lawyerService.getAllConnectionsByLawyerId(userId);
+    public ResponseEntity<List<ClientDetailsDTO>> getAllConnectionsByUserId(@PathVariable("userId") long userId) {
+        List<ClientDetailsDTO> connections = lawyerService.getAllConnectionsByLawyerId(userId);
         if (connections != null) {
             return new ResponseEntity<>(connections, HttpStatus.OK);
         } else {
