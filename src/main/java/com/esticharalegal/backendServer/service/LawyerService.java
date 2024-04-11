@@ -85,7 +85,18 @@ public class LawyerService {
             userRepository.save(connectionUserEntity);
         }
     }
-
+    public void addClient(Long userId, ClientDetailsDTO connectionClient) {
+        Optional<User> user = userRepository.findById(userId);
+        Optional<User> connectionUser = userRepository.findByUsername(connectionClient.getUsername());
+        if (user.isPresent() && connectionUser.isPresent()) {
+            User userEntity = user.get();
+            User connectionUserEntity = connectionUser.get();
+            userEntity.getConnections().add(connectionUserEntity);
+            connectionUserEntity.getConnections().add(userEntity);
+            userRepository.save(userEntity);
+            userRepository.save(connectionUserEntity);
+        }
+    }
     public List<ClientDetailsDTO> getAllConnectionsByLawyerId(Long id){
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
