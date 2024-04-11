@@ -38,5 +38,7 @@ public class ClientDetailsDTO {
     private Date birthday;
     @Setter
     private boolean password;
+    @Setter
+    private String bio;
 
 }

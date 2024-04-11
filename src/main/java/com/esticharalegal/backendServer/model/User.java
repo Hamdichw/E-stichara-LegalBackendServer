@@ -58,7 +58,7 @@ public class User {
     @Column(name = "LicenseNumber")
     private String licenseNumber;
 
-    @Column(name = "Bio")
+    @Column(name = "Bio/Accusation")
     private String bio;
 
     @Column(name = "Birthday")
