@@ -52,6 +52,8 @@ public class LawyerAuthController {
         return ResponseEntity.ok("Logged out successfully");
     }
 
+
+
     @PostMapping("/{userId}/connections/{connectionUserId}")
     public ResponseEntity<String> addConnection(@PathVariable Long userId, @PathVariable Long connectionUserId) {
         lawyerService.addConnection(userId, connectionUserId);
