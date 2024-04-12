@@ -57,14 +57,18 @@ public class DashboardService {
         AgeGroupCount ageGroupCount = new AgeGroupCount();
 
         for (User connection : user.getConnections()) {
-            int age = calculateAge(connection.getBirthday());
-            if (age < 20) {
-                ageGroupCount.incrementUnder20();
-            } else if (age < 40) {
-                ageGroupCount.incrementUnder40();
-            } else {
-                ageGroupCount.incrementOver40();
+            if(connection.getBirthday() != null)
+            {
+                int age = calculateAge(connection.getBirthday());
+                if (age < 20) {
+                    ageGroupCount.incrementUnder20();
+                } else if (age < 40) {
+                    ageGroupCount.incrementUnder40();
+                } else {
+                    ageGroupCount.incrementOver40();
+                }
             }
+
         }
         return ageGroupCount;
     }
