@@ -64,7 +64,7 @@ public class User {
     @Column(name = "Birthday")
     @Temporal(TemporalType.DATE)
     private Date birthday;
-
+    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(
             name = "user_connections",
