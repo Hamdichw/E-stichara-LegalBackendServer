@@ -22,6 +22,8 @@ public class LawyerDetailsDTO {
     private String email;
     private String phoneNumber;
     private String bio;
+    private String profileImage;
+
     @JsonIgnore
     @Transient
     private KeyPair keyPair;
