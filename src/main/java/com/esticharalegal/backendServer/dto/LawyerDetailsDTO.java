@@ -23,7 +23,7 @@ public class LawyerDetailsDTO {
     private String phoneNumber;
     private String bio;
     private String profileImage;
-
+    private String address;
     @JsonIgnore
     @Transient
     private KeyPair keyPair;
