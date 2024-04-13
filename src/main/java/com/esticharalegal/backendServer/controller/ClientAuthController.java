@@ -48,7 +48,7 @@ public class ClientAuthController {
         clientDto.setToken(userAuthenticationProvider.createToken(clientDto));
         Cookie cookie = new Cookie("token", clientDto.getToken());
         cookie.setPath("/");
-        cookie.setMaxAge(3600); // set cookie expiration time in seconds, adjust as needed
+        cookie.setMaxAge(3600000); // set cookie expiration time in seconds, adjust as needed
         response.addCookie(cookie);
         return ResponseEntity.ok(clientDto);
     }

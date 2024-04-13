@@ -32,7 +32,7 @@ public class LawyerAuthController {
         lawyerDto.setToken(userAuthenticationProvider.createToken(lawyerDto));
         Cookie cookie = new Cookie("token", lawyerDto.getToken());
         cookie.setPath("/");
-        cookie.setMaxAge(3600); // set cookie expiration time in seconds, adjust as needed
+        cookie.setMaxAge(3600000); // set cookie expiration time in seconds, adjust as needed
         response.addCookie(cookie);
         return ResponseEntity.ok(lawyerDto);
     }
