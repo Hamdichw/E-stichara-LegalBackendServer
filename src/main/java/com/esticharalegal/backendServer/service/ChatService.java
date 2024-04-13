@@ -30,13 +30,14 @@ public class ChatService {
 
     private final MessageRepository messageRepository;
 
-    public Chat addChat(Chat chat) throws AppException {
+    public String addChat(Chat chat) throws AppException {
         Optional<User> firstuser = userRepository.findByUsername(chat.getFirstUser().getUsername());
         Optional<User> seconduser = userRepository.findByUsername(chat.getSecondUser().getUsername());
         if(firstuser.isPresent() && seconduser.isPresent()){
             chat.setFirstUser(firstuser.get());
             chat.setSecondUser(seconduser.get());
-             return chatRepository.save(chat);
+             chatRepository.save(chat);
+            return "chat created" ;
         }
         else {
             throw  new  AppException("user not exist ",HttpStatus.BAD_REQUEST);

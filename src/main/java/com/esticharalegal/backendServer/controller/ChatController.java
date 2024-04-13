@@ -22,9 +22,9 @@ public class ChatController {
     private ChatService chatService;
 
     @PostMapping("/add")
-    public ResponseEntity<Chat> createChat(@RequestBody Chat chat) throws AppException {
+    public ResponseEntity<String> createChat(@RequestBody Chat chat) throws AppException {
 
-        return new ResponseEntity<Chat>(chatService.addChat(chat), HttpStatus.CREATED);
+        return new ResponseEntity<String>(chatService.addChat(chat), HttpStatus.CREATED);
     }
 
     @PostMapping("/add/message1")
