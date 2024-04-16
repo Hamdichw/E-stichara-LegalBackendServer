@@ -31,8 +31,8 @@ public class ChatService {
     private final MessageRepository messageRepository;
 
     public String addChat(Chat chat) throws AppException {
-        Optional<User> firstuser = userRepository.findByUsername(chat.getFirstUser().getUsername());
-        Optional<User> seconduser = userRepository.findByUsername(chat.getSecondUser().getUsername());
+        Optional<User> firstuser = userRepository.findById(chat.getFirstUser().getUserID());
+        Optional<User> seconduser = userRepository.findById(chat.getSecondUser().getUserID());
         if(firstuser.isPresent() && seconduser.isPresent()){
             chat.setFirstUser(firstuser.get());
             chat.setSecondUser(seconduser.get());
