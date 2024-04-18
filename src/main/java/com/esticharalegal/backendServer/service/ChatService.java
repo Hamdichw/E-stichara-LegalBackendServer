@@ -76,10 +76,18 @@ public class ChatService {
     }
 
 
-    public List<Chat> findallchats(Long userId) throws AppException {
-        Optional<User> firstuser = userRepository.findById(userId);
+    public List<Chat> findallchatsClients(Long userId) throws AppException {
         Optional<User> seconduser = userRepository.findById(userId);
-        if (chatRepository.getChatByFirstUserOrSecondUser(firstuser.get(),seconduser.get()).isEmpty()) {
+        if (chatRepository.getChatByFirstUser(seconduser.get()).isEmpty()) {
+            throw new AppException();
+        } else {
+            return chatRepository.findAll();
+        }
+
+    }
+    public List<Chat> findallchatsLawyers(Long userId) throws AppException {
+        Optional<User> firstUser = userRepository.findById(userId);
+        if (chatRepository.getChatByFirstUser(firstUser.get()).isEmpty()) {
             throw new AppException();
         } else {
             return chatRepository.findAll();

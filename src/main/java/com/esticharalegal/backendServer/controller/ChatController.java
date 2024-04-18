@@ -33,11 +33,19 @@ public class ChatController {
     }
 
     @GetMapping("/all/{userId}")
-    public ResponseEntity<List<Chat>> getAllChats(@PathVariable long userId) {
+    public ResponseEntity<List<Chat>> getAllChatsClients(@PathVariable long userId) {
         try {
-            return new ResponseEntity<List<Chat>>(chatService.findallchats(userId), HttpStatus.OK);
+            return new ResponseEntity<List<Chat>>(chatService.findallchatsClients(userId), HttpStatus.OK);
         } catch (AppException e) {
            return new ResponseEntity("List not found", HttpStatus.CONFLICT);
+        }
+    }
+    @GetMapping("/all/Lawyers/{userId}")
+    public ResponseEntity<List<Chat>> getAllChatsLawyers(@PathVariable long userId) {
+        try {
+            return new ResponseEntity<List<Chat>>(chatService.findallchatsLawyers(userId), HttpStatus.OK);
+        } catch (AppException e) {
+            return new ResponseEntity("List not found", HttpStatus.CONFLICT);
         }
     }
 
