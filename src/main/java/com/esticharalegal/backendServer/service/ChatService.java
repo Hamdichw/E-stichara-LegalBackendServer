@@ -76,21 +76,21 @@ public class ChatService {
     }
 
 
-    public List<Chat> findallchatsClients(Long userId) throws AppException {
+    public HashSet<Chat> findallchatsClients(Long userId) throws AppException {
         Optional<User> seconduser = userRepository.findById(userId);
         if (chatRepository.getChatBySecondUser(seconduser.get()).isEmpty()) {
             throw new AppException();
         } else {
-            return chatRepository.findAll();
+            return chatRepository.getChatBySecondUser(seconduser.get());
         }
 
     }
-    public List<Chat> findallchatsLawyers(Long userId) throws AppException {
+    public HashSet<Chat> findallchatsLawyers(Long userId) throws AppException {
         Optional<User> firstUser = userRepository.findById(userId);
         if (chatRepository.getChatByFirstUser(firstUser.get()).isEmpty()) {
             throw new AppException();
         } else {
-            return chatRepository.findAll();
+            return chatRepository.getChatByFirstUser(firstUser.get());
         }
 
     }
