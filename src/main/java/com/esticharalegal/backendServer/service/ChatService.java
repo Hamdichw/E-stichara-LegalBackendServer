@@ -76,8 +76,10 @@ public class ChatService {
     }
 
 
-    public List<Chat> findallchats() throws AppException {
-        if (chatRepository.findAll().isEmpty()) {
+    public List<Chat> findallchats(Long userId) throws AppException {
+        Optional<User> firstuser = userRepository.findById(userId);
+        Optional<User> seconduser = userRepository.findById(userId);
+        if (chatRepository.getChatByFirstUserOrSecondUser(firstuser.get(),seconduser.get()).isEmpty()) {
             throw new AppException();
         } else {
             return chatRepository.findAll();

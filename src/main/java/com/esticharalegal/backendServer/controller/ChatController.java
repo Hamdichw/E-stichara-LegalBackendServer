@@ -35,7 +35,7 @@ public class ChatController {
     @GetMapping("/all/{userId}")
     public ResponseEntity<List<Chat>> getAllChats(@PathVariable long userId) {
         try {
-            return new ResponseEntity<List<Chat>>(chatService.findallchats(), HttpStatus.OK);
+            return new ResponseEntity<List<Chat>>(chatService.findallchats(userId), HttpStatus.OK);
         } catch (AppException e) {
            return new ResponseEntity("List not found", HttpStatus.CONFLICT);
         }
