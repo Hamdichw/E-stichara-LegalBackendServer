@@ -35,10 +35,7 @@ public class ClientAuthController {
     public ResponseEntity<ClientDTO> login(@RequestBody @Valid CredentialsClientDTO credentialsClientDto, HttpServletResponse response) throws AppException {
         ClientDTO clientDto = clientService.login(credentialsClientDto);
         clientDto.setToken(userAuthenticationProvider.createToken(clientDto));
-        Cookie cookie = new Cookie("token", clientDto.getToken());
-        cookie.setPath("/");
-        cookie.setMaxAge(3600); // set cookie expiration time in seconds, adjust as needed
-        response.addCookie(cookie);
+
         return ResponseEntity.ok(clientDto);
     }
 

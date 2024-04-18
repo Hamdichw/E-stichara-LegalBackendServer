@@ -36,7 +36,7 @@ public class UserAuthenticationProvider {
     }
     public String createToken(LawyerDTO user) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + 3600000); // 1 hour
+        Date validity = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // Adding 7 days
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()
@@ -49,7 +49,7 @@ public class UserAuthenticationProvider {
     }
     public String createToken(ClientDTO user) {
         Date now = new Date();
-        Date validity = new Date(now.getTime() + 3600000);
+        Date validity = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // Adding 7 days
 
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
         return JWT.create()
