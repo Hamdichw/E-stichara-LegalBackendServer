@@ -54,7 +54,7 @@ public class LawyerService {
         Optional<User> userNameExist = userRepository.findByUsername(userDto.username());
 
         if (optionalUser.isPresent()) {
-            throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
+            throw new AppException("Licence Number already exists", HttpStatus.BAD_REQUEST);
         }
 
         User user = lawyerMapper.signUpToUser(userDto);
