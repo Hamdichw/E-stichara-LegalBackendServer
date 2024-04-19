@@ -69,8 +69,9 @@ public class SignatureService{
         Document document = documentOptional.get();
 
         try {
-            // Fetch the latest signed document
-            Optional<DocumentSigned> latestDocumentSignedOptional = documentSignedRepository.findDocumentSignedByDocument(document);
+            Optional<DocumentSigned> latestDocumentSignedOptional = documentSignedRepository.findDocumentSignedByDocument(document)
+                    .stream()
+                    .reduce((first, second) -> second);
             if (latestDocumentSignedOptional.isEmpty()) {
                 return false;
             }
