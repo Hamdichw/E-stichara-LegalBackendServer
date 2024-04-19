@@ -90,7 +90,6 @@ public class DocumentService {
         long userIdLong;
         try {
             docIdLong = Long.parseLong(docId);
-            userIdLong = Long.parseLong(userId);
         } catch (NumberFormatException e) {
             throw new AppException("Invalid ID format", HttpStatus.BAD_REQUEST);
         }
