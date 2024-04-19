@@ -67,14 +67,16 @@ public class ClientService {
     public ClientDTO register(SignUpClientDTO userDto) throws AppException {
         Optional<User> optionalUser = userRepository.findByEmail(userDto.email());
         Optional<User> userNameExist = userRepository.findByUsername(userDto.username());
-        if(userNameExist.isPresent()){
-            throw new AppException("user Name already exists", HttpStatus.BAD_REQUEST);
-        }
+
         if (optionalUser.isPresent()) {
             throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
         }
 
         User user = clientMapper.signUpToUser(userDto);
+        if(userNameExist.isPresent()){
+            String newUsername = userDto.username() + userNameExist.get().getUserID() + 1;
+            user.setUsername(newUsername);
+        }
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userDto.password())));
         user.generateKeyPair();
         user.setRole(UserType.CLIENT);

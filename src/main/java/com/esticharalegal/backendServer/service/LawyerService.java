@@ -52,14 +52,16 @@ public class LawyerService {
     public LawyerDTO register(SignUpLawyerDTO userDto) throws AppException {
         Optional<User> optionalUser = userRepository.findByLicenseNumber(userDto.licenseNumber());
         Optional<User> userNameExist = userRepository.findByUsername(userDto.username());
-        if(userNameExist.isPresent()){
-            throw new AppException("user Name already exists", HttpStatus.BAD_REQUEST);
-        }
+
         if (optionalUser.isPresent()) {
             throw new AppException("Login already exists", HttpStatus.BAD_REQUEST);
         }
 
         User user = lawyerMapper.signUpToUser(userDto);
+        if(userNameExist.isPresent()){
+            String newUsername = userDto.username() + userNameExist.get().getUserID() + 1;
+            user.setUsername(newUsername);
+        }
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userDto.password())));
         user.generateKeyPair();
         user.setRole(UserType.LAWYER);
