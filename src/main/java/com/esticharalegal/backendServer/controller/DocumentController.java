@@ -142,7 +142,7 @@ public class DocumentController {
     }
 
     @PostMapping("/shareMyDocument")
-    public void ShareMyDocument(@RequestParam("docId") String docId, @RequestParam("userId") String userId) throws AppException {
+    public void ShareMyDocument(@RequestParam("docId") String docId, @RequestParam("Email") String userId) throws AppException {
         documentService.ShareDocument(docId,userId);
     }
 }

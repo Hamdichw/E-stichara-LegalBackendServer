@@ -95,7 +95,7 @@ public class DocumentService {
             throw new AppException("Invalid ID format", HttpStatus.BAD_REQUEST);
         }
         Optional<Document> existingDocumentOptional = documentRepository.findById(docIdLong);
-        Optional<User> existingUserOptional = userRepository.findById(userIdLong);
+        Optional<User> existingUserOptional = userRepository.findByEmail(userId);
         if(existingUserOptional.isEmpty() || existingDocumentOptional.isEmpty()){
             throw  new AppException("error ", HttpStatus.NOT_FOUND);
         }else{
