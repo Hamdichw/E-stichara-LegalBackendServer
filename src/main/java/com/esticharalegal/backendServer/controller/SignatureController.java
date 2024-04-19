@@ -6,7 +6,11 @@ import com.esticharalegal.backendServer.service.SignatureService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,27 +22,32 @@ public class SignatureController {
 
 
     @PostMapping("/sign-document")
-    public void signDocument(@RequestParam("documentId") long documentId, @RequestParam("userId") Long userId) throws AppException {
+    public ResponseEntity<Map<String, String>> signDocument(@RequestParam("documentId") long documentId, @RequestParam("userId") Long userId) throws AppException {
         DocumentSigned documentSigned = signatureService.signDocument(documentId, userId);
-
+        Map<String, String> response = new HashMap<>();
         if (documentSigned != null) {
-            throw  new AppException("Document signed successfully. Signature: " + documentSigned.getSignature(), HttpStatus.OK) ;
+            response.put("message", "Document signed successfully. Signature: " + documentSigned.getSignature());
         } else {
-            throw  new AppException( "Failed to sign the document. Please check the provided IDs.", HttpStatus.OK);
+            response.put("message", "Failed to sign the document. Please check the provided IDs.");
         }
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
 
     @GetMapping("/verify")
-    public void verifySignature(
+    public ResponseEntity<Map<String, String>> verifySignature(
             @RequestParam("documentSignedId") Long documentSignedId,
             @RequestParam("userId") Long userId
     ) throws AppException {
         boolean isSignatureValid = signatureService.verifySignature(documentSignedId, userId);
+        Map<String, String> response = new HashMap<>();
 
         if (isSignatureValid) {
-            throw  new AppException( "Signature is valid for the given DocumentSigned ID and User ID.", HttpStatus.OK);
+            response.put("message", "Signature is valid for the given DocumentSigned ID and User ID.");
         } else {
-            throw  new AppException( "Signature is not valid for the given DocumentSigned ID and User ID.", HttpStatus.OK);
+            response.put("message", "Signature is not valid for the given DocumentSigned ID and User ID.");
         }
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+
     }
 }
