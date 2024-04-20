@@ -101,7 +101,7 @@ public class LawyerService {
         }
         if (user.isPresent()){
             User userEntity = user.get();
-            User connectionUserEntity = userRepository.save(lawyerMapper.NewClientToUser(connectionClient));
+            User connectionUserEntity = lawyerMapper.NewClientToUser(connectionClient);
             userEntity.getConnections().add(connectionUserEntity);
             connectionUserEntity.getConnections().add(userEntity);
             userRepository.save(userEntity);
