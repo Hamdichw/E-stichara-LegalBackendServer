@@ -110,7 +110,7 @@ public class LawyerService {
         }
 
 
-
+        connectionUserEntity.setRole(UserType.CLIENT);
         // Convert DTO to Entity
         User client = userRepository.save(connectionUserEntity);
         // Add connections
