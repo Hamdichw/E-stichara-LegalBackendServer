@@ -94,22 +94,22 @@ public class LawyerService {
             throw new AppException("User not found", HttpStatus.NOT_FOUND);
         }
 
-        Optional<User> existEmail = userRepository.findByEmail(connectionClient.getEmail());
+        Optional<User> existEmail = userRepository.findByEmail(connectionClient.email());
         if(existEmail.isPresent()){
             throw new AppException("Client with this email already exists", HttpStatus.CONFLICT);
         }
 
-        Optional<User> connectionUser = userRepository.findByUsername(connectionClient.getUsername());
+        Optional<User> connectionUser = userRepository.findByUsername(connectionClient.username());
+        User connectionUserEntity = lawyerMapper.NewClientToUser(connectionClient);
         if(connectionUser.isPresent()){
-            String modifiedUsername = connectionClient.getUsername() + user.get().getUserID() + 1;
-            connectionClient.setUsername(modifiedUsername);
+            String modifiedUsername = connectionClient.username() + user.get().getUserID() + 1;
+            connectionUserEntity.setUsername(modifiedUsername);
 
         }
 
 
 
         // Convert DTO to Entity
-        User connectionUserEntity = lawyerMapper.NewClientToUser(connectionClient);
         User client = userRepository.save(connectionUserEntity);
         // Add connections
         User userEntity = user.get();
