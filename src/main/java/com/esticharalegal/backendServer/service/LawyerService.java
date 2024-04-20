@@ -113,7 +113,7 @@ public class LawyerService {
         User client = userRepository.save(connectionUserEntity);
         // Add connections
         User userEntity = user.get();
-        userEntity.getConnections().add(connectionUserEntity);
+        userEntity.getConnections().add(client);
         client.getConnections().add(userEntity);
 
         // Save only if everything is successful
