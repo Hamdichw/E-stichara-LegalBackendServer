@@ -59,6 +59,10 @@ public class LawyerAuthController {
     public void addClient(@PathVariable Long userId, @RequestBody @Valid NewClientDTO clientDetailsDTO) throws AppException {
         lawyerService.addClient(userId, clientDetailsDTO);
     }
+    @PutMapping("/{userId}/updateClient")
+    public void updateClient(@PathVariable Long userId, @RequestBody @Valid NewClientDTO clientDetailsDTO) throws AppException {
+        lawyerService.updateClient(userId, clientDetailsDTO);
+    }
     @GetMapping("/{userId}/connections")
     public ResponseEntity<List<ClientDetailsDTO>> getAllConnectionsByUserId(@PathVariable("userId") long userId) {
         List<ClientDetailsDTO> connections = lawyerService.getAllConnectionsByLawyerId(userId);

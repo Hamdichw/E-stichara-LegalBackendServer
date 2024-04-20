@@ -89,7 +89,15 @@ public class LawyerService {
          throw new AppException("Connection added successfully", HttpStatus.CREATED);
         }
     }
-    @Transactional
+
+    public void  updateClient(Long userId , NewClientDTO newClientDTO) throws AppException {
+        Optional<User> client =  userRepository.findById(userId);
+        User updateClient = lawyerMapper.NewClientToUser(newClientDTO);
+        User currentUser = client.get();
+        BeanUtils.copyProperties(updateClient, currentUser, "userID","password" ,"connections", "keyPair", "publicKey", "privateKey","profileImage","role");
+        User savedUser =  userRepository.save(currentUser);
+        throw  new AppException("client updated",HttpStatus.OK);
+    }
     public void addClient(Long userId, NewClientDTO connectionClient) throws AppException {
         Optional<User> user = userRepository.findById(userId);
         if (!user.isPresent()) {
