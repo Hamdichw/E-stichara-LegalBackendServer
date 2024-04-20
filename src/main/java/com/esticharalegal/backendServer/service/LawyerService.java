@@ -104,14 +104,13 @@ public class LawyerService {
         Optional<User> connectionUser = userRepository.findByUsername(connectionClient.username());
         User connectionUserEntity = lawyerMapper.NewClientToUser(connectionClient);
         if(connectionUser.isPresent()){
-            String modifiedUsername = connectionClient.username() + user.get().getUserID() + 1;
+            String modifiedUsername = connectionClient.username() + connectionUser.get().getUserID() + 1;
             connectionUserEntity.setUsername(modifiedUsername);
 
         }
 
 
         connectionUserEntity.setRole(UserType.CLIENT);
-        // Convert DTO to Entity
         User client = userRepository.save(connectionUserEntity);
         // Add connections
         User userEntity = user.get();
