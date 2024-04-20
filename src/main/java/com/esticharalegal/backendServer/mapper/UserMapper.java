@@ -20,6 +20,10 @@ public interface UserMapper {
 
     User signUpToUser(SignUpClientDTO signUpClientDto);
 
+    @Mapping(target = "password", ignore = true)
+
+    User clientDetailsDTOToUser(ClientDetailsDTO clientDetailsDTO);
+
 
     User credentialsGoogleToUser(CredentialsGoogle credentialsGoogle);
     LawyerDTO toLawyerDto(User user);

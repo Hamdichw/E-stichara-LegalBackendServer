@@ -75,7 +75,7 @@ public class LawyerService {
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
         return lawyerMapper.toLawyerDto(user);
     }
-    public void addConnection(Long userId, Long connectionUserId) {
+    public void addConnection(Long userId, Long connectionUserId) throws AppException {
         Optional<User> user = userRepository.findById(userId);
         Optional<User> connectionUser = userRepository.findById(connectionUserId);
         if (user.isPresent() && connectionUser.isPresent()) {
@@ -85,19 +85,31 @@ public class LawyerService {
             connectionUserEntity.getConnections().add(userEntity);
             userRepository.save(userEntity);
             userRepository.save(connectionUserEntity);
+         throw new AppException("Connection added successfully", HttpStatus.CREATED);
         }
     }
-    public void addClient(Long userId, ClientDetailsDTO connectionClient) {
+    public void addClient(Long userId, ClientDetailsDTO connectionClient) throws AppException {
         Optional<User> user = userRepository.findById(userId);
         Optional<User> connectionUser = userRepository.findByUsername(connectionClient.getUsername());
-        if (user.isPresent() && connectionUser.isPresent()) {
+        Optional<User> existEmail = userRepository.findByEmail(connectionClient.getEmail());
+        if(existEmail.isPresent()){
+            throw  new AppException("Client already exist" , HttpStatus.OK);
+        }
+        if(connectionUser.isPresent()){
+            connectionClient.setUsername(connectionClient.getUsername() + connectionUser.get().getUserID() + 1);
+
+        }
+        if (user.isPresent()){
             User userEntity = user.get();
-            User connectionUserEntity = connectionUser.get();
+            User connectionUserEntity = lawyerMapper.clientDetailsDTOToUser(connectionClient);
             userEntity.getConnections().add(connectionUserEntity);
             connectionUserEntity.getConnections().add(userEntity);
             userRepository.save(userEntity);
             userRepository.save(connectionUserEntity);
+            throw  new AppException("Client added " , HttpStatus.OK);
+
         }
+
     }
     public List<ClientDetailsDTO> getAllConnectionsByLawyerId(Long id){
         Optional<User> user = userRepository.findById(id);

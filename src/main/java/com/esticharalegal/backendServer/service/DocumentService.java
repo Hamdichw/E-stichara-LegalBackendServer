@@ -87,7 +87,6 @@ public class DocumentService {
     }
     public void  ShareDocument(String docId,String userId) throws AppException {
         long docIdLong;
-        long userIdLong;
         try {
             docIdLong = Long.parseLong(docId);
         } catch (NumberFormatException e) {

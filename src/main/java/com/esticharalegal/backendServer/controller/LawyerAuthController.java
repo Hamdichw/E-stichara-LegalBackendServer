@@ -52,9 +52,12 @@ public class LawyerAuthController {
 
 
     @PostMapping("/{userId}/connections/{connectionUserId}")
-    public ResponseEntity<String> addConnection(@PathVariable Long userId, @PathVariable Long connectionUserId) {
+    public void addConnection(@PathVariable Long userId, @PathVariable Long connectionUserId) throws AppException {
         lawyerService.addConnection(userId, connectionUserId);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Connection added successfully");
+    }
+    @PostMapping("/{userId}/client")
+    public void addClient(@PathVariable Long userId, @RequestBody ClientDetailsDTO clientDetailsDTO) throws AppException {
+        lawyerService.addClient(userId, clientDetailsDTO);
     }
     @GetMapping("/{userId}/connections")
     public ResponseEntity<List<ClientDetailsDTO>> getAllConnectionsByUserId(@PathVariable("userId") long userId) {
@@ -65,6 +68,7 @@ public class LawyerAuthController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     };
+
 
     @PostMapping("/reset")
     public void resetPassword(@RequestParam("email") String email) {
