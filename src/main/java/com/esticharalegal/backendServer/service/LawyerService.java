@@ -88,7 +88,7 @@ public class LawyerService {
          throw new AppException("Connection added successfully", HttpStatus.CREATED);
         }
     }
-    public void addClient(Long userId, ClientDetailsDTO connectionClient) throws AppException {
+    public void addClient(Long userId, NewClientDTO connectionClient) throws AppException {
         Optional<User> user = userRepository.findById(userId);
         Optional<User> connectionUser = userRepository.findByUsername(connectionClient.getUsername());
         Optional<User> existEmail = userRepository.findByEmail(connectionClient.getEmail());
@@ -101,7 +101,7 @@ public class LawyerService {
         }
         if (user.isPresent()){
             User userEntity = user.get();
-            User connectionUserEntity = lawyerMapper.clientDetailsDTOToUser(connectionClient);
+            User connectionUserEntity = userRepository.save(lawyerMapper.NewClientToUser(connectionClient));
             userEntity.getConnections().add(connectionUserEntity);
             connectionUserEntity.getConnections().add(userEntity);
             userRepository.save(userEntity);

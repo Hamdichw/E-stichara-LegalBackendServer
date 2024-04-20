@@ -56,7 +56,7 @@ public class LawyerAuthController {
         lawyerService.addConnection(userId, connectionUserId);
     }
     @PostMapping("/{userId}/client")
-    public void addClient(@PathVariable Long userId, @RequestBody ClientDetailsDTO clientDetailsDTO) throws AppException {
+    public void addClient(@PathVariable Long userId, @RequestBody NewClientDTO clientDetailsDTO) throws AppException {
         lawyerService.addClient(userId, clientDetailsDTO);
     }
     @GetMapping("/{userId}/connections")

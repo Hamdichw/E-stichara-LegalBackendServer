@@ -20,6 +20,9 @@ public interface UserMapper {
 
     User signUpToUser(SignUpClientDTO signUpClientDto);
 
+
+    User NewClientToUser(NewClientDTO newClientDTO);
+
     @Mapping(target = "password", ignore = true)
 
     User clientDetailsDTOToUser(ClientDetailsDTO clientDetailsDTO);
