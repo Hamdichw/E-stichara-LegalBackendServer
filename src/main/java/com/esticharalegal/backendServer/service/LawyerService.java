@@ -8,6 +8,7 @@ import com.esticharalegal.backendServer.model.User;
 
 import com.esticharalegal.backendServer.Enum.UserType;
 import com.esticharalegal.backendServer.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -88,6 +89,7 @@ public class LawyerService {
          throw new AppException("Connection added successfully", HttpStatus.CREATED);
         }
     }
+    @Transactional
     public void addClient(Long userId, NewClientDTO connectionClient) throws AppException {
         Optional<User> user = userRepository.findById(userId);
         if (!user.isPresent()) {
