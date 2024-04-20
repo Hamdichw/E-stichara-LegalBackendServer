@@ -113,13 +113,12 @@ public class LawyerService {
         connectionUserEntity.setRole(UserType.CLIENT);
         User client = userRepository.save(connectionUserEntity);
         // Add connections
-//        User userEntity = user.get();
-//        userEntity.getConnections().add(client);
-//        client.getConnections().add(userEntity);
-//
-//        // Save only if everything is successful
-//        userRepository.save(userEntity);
-//        userRepository.save(client);
+       User userEntity = user.get();
+        userEntity.getConnections().add(client);
+
+
+       // Save only if everything is successful
+        userRepository.save(userEntity);
     }
     public List<ClientDetailsDTO> getAllConnectionsByLawyerId(Long id){
         Optional<User> user = userRepository.findById(id);
