@@ -156,24 +156,33 @@ public class DocumentController {
         try {
             Optional<Document> document = documentService.findDocumentById(id);
             if (document.isPresent()) {
-                DocumentSigned foundDocument = document.get().getDocumentSignedList().getLast();
+                List<DocumentSigned> signedDocuments = document.get().getDocumentSignedList();
+                if (!signedDocuments.isEmpty()) {
+                    // Get the last signed document from the list
+                    DocumentSigned lastSignedDocument = signedDocuments.get(signedDocuments.size() - 1);
 
-                // Set the response content type as application/pdf
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_PDF);
-                headers.setContentDispositionFormData("attachment", "document_" + id + ".pdf");
+                    // Set the response content type as application/pdf
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.APPLICATION_PDF);
+                    headers.setContentDispositionFormData("attachment", "document_" + id + ".pdf");
 
-                // Create InputStreamResource from the document content
-                InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(foundDocument.getContent()));
+                    // Create InputStreamResource from the document content
+                    InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(lastSignedDocument.getContent()));
 
-                // Return ResponseEntity with file content and headers
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .body(resource);
+                    // Return ResponseEntity with file content and headers
+                    return ResponseEntity.ok()
+                            .headers(headers)
+                            .body(resource);
+                } else {
+                    // No signed documents found
+                    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                }
             } else {
+                // Document not found
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
+            // Internal server error
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
