@@ -66,29 +66,33 @@ public class DocumentService {
         return documentSignedRepository.findById(id);
     }
 
-    public boolean deleteDocument(Long id ,Long docId) {
+    public boolean deleteDocument(Long id, Long docId) {
+        // Find the user
         Optional<User> user = userRepository.findById(id);
-        Optional<Document> document = documentRepository.findById(docId);
-        Optional<DocumentShared> documentShared = documentSharedRepository.findById(docId);
-        if(document.isPresent() && user.isPresent()){
-            if(user.get().getUsername().equals(document.get().getUploadedByUserName())){
-                documentRepository.deleteById(docId);
-                return  true;
-            }
+        if (user.isEmpty()) return false; // No need to proceed if user doesn't exist
 
-        }
-        else if (documentShared.isPresent() && user.isPresent()) {
-            if(user.get().getUsername().equals(documentShared.get().getSharedWith().getUsername())) {
-                documentSharedRepository.deleteById(docId);
+        // Find the document
+        Optional<Document> document = documentRepository.findById(docId);
+        if (document.isPresent()) {
+            // Check if the user uploaded this document
+            if (user.get().getUsername().equals(document.get().getUploadedByUserName())) {
+                documentRepository.deleteById(docId);
                 return true;
             }
-
+        } else {
+            // Find the shared document
+            Optional<DocumentShared> documentShared = documentSharedRepository.findById(docId);
+            if (documentShared.isPresent()) {
+                // Check if the user has access to this shared document
+                if (user.get().getUsername().equals(documentShared.get().getSharedWith().getUsername())) {
+                    documentSharedRepository.deleteById(docId);
+                    return true;
+                }
+            }
         }
-
-
-
-        return false;
+        return false; // If none of the conditions match, return false
     }
+
 
     public Document updateDocument(Long id, Document document) {
         Optional<Document> existingDocumentOptional = documentRepository.findById(id);
