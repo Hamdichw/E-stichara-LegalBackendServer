@@ -29,7 +29,6 @@ public class Document {
 
     @ManyToOne
     @JoinColumn(name = "UploadedBy")
-    @JsonIgnore
     private User uploadedBy;
 
     @Column(name = "UploadedByUserName")
