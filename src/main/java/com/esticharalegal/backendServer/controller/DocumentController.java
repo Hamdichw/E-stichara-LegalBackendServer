@@ -82,7 +82,7 @@ public class DocumentController {
     @DeleteMapping("/delete/{docId}")
     public ResponseEntity<Map<String, String>> deleteDocument( @PathVariable Long docId) {
         Map<String, String> response = new HashMap<>();
-        try {
+
             boolean deleted = documentService.deleteDocument(docId);
             if (deleted) {
                 response.put("message", "Deleted successfully");
@@ -91,10 +91,7 @@ public class DocumentController {
                 response.put("message", "Document not found");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
-        } catch (Exception e) {
-            response.put("message", "Internal server error");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
+
     }
 
     @PutMapping("/{id}")
