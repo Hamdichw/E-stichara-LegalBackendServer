@@ -59,19 +59,29 @@ public class DocumentService {
     public Optional<Document> findDocumentById(Long id) {
         return documentRepository.findById(id);
     }
-    public boolean deleteDocument(Long docId) {
+    public boolean deleteDocument(Long id ,Long docId) {
+        Optional<User> user = userRepository.findById(id);
         Optional<Document> document = documentRepository.findById(docId);
         Optional<DocumentShared> documentShared = documentSharedRepository.findById(docId);
-        if(document.isPresent()){
-            documentRepository.deleteById(docId);
-            return  true;
-        } else if (documentShared.isPresent()) {
-            documentSharedRepository.deleteById(docId);
-            return  true ;
-        } else{
+        if(document.isPresent() && user.isPresent()){
+            if(user.get().getUsername().equals(document.get().getUploadedByUserName())){
+                documentRepository.deleteById(docId);
+                return  true;
+            }
+
+        }
+        else if (documentShared.isPresent() && user.isPresent()) {
+            if(user.get().getUsername().equals(documentShared.get().getSharedWith().getUsername())) {
+                documentSharedRepository.deleteById(docId);
+                return true;
+            }
+
+        }
+        else{
             return  false;
         }
 
+        return false;
     }
 
     public Document updateDocument(Long id, Document document) {
