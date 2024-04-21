@@ -52,6 +52,7 @@ public class SignatureService{
             documentSigned.setSigner(user);
             documentSigned.setSignedDate(LocalDateTime.now());
             documentSigned.setSignature(signature);
+            documentSigned.setContent(signedDocumentContent);
 
             return documentSignedRepository.save(documentSigned);
         } catch (Exception e) {
