@@ -46,13 +46,14 @@ public class SignatureService{
             String additionalText = "Digitally Signed By: " + user.getFirstName()+ " " + user.getLastName()+ "\nDate: " + LocalDateTime.now();
             byte[] signedDocumentContent = addAdditionalText(documentContent, additionalText);
             String signature = signDocumentContent(documentContent, privateKey.getEncoded());
-
+            String documentText = new String(documentContent);
+            documentText += "\n\n" + additionalText;
             DocumentSigned documentSigned = new DocumentSigned();
             documentSigned.setDocument(document);
             documentSigned.setSigner(user);
             documentSigned.setSignedDate(LocalDateTime.now());
             documentSigned.setSignature(signature);
-            documentSigned.setContent(signedDocumentContent);
+            documentSigned.setContent(documentContent);
 
             return documentSignedRepository.save(documentSigned);
         } catch (Exception e) {
