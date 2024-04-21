@@ -94,7 +94,7 @@ public class LawyerService {
         Optional<User> client =  userRepository.findById(userId);
         User updateClient = lawyerMapper.NewClientToUser(newClientDTO);
         User currentUser = client.get();
-        BeanUtils.copyProperties(updateClient, currentUser, "userID","password" ,"connections", "keyPair", "publicKey", "privateKey","profileImage","role");
+        BeanUtils.copyProperties(updateClient, currentUser, "userID","username","password" ,"connections", "keyPair", "publicKey", "privateKey","profileImage","role");
         User savedUser =  userRepository.save(currentUser);
         throw  new AppException("client updated",HttpStatus.OK);
     }

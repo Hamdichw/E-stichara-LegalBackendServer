@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -32,34 +35,40 @@ public class DocumentController {
     }
 
     @PostMapping("/{userId}")
-    public ResponseEntity<String> createDocument(
+    public ResponseEntity<Map<String, String>> createDocument(
             @PathVariable Long userId,
             @RequestParam("title") String title,
             @RequestParam("description") String description,
             @RequestParam("file") MultipartFile file
     ) {
+        Map<String, String> response = new HashMap<>();
         Document document = new Document();
         document.setTitle(title);
         document.setDescription(description);
 
         try {
             document.setContent(file.getBytes());
-        } catch (Exception e) {
-            return new ResponseEntity<>("Failed to process file", HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IOException e) {
+            response.put("message", "Failed to process file");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
 
         try {
             Document savedDocument = documentService.saveDocument(document, userId);
 
             if (savedDocument != null) {
-                return new ResponseEntity<>("Created successfully", HttpStatus.CREATED);
+                response.put("message", "Created successfully");
+                return ResponseEntity.status(HttpStatus.CREATED).body(response);
             } else {
-                return new ResponseEntity<>("User with ID " + userId + " does not exist", HttpStatus.BAD_REQUEST);
+                response.put("message", "User with ID " + userId + " does not exist");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
             }
         } catch (Exception e) {
-            return new ResponseEntity<>("Failed to create document", HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("message", "Failed to create document");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<Document> getDocumentById(@PathVariable Long id) {
         try {
@@ -71,19 +80,23 @@ public class DocumentController {
         }
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteDocument(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteDocument(@PathVariable Long id) {
+        Map<String, String> response = new HashMap<>();
         try {
             boolean deleted = documentService.deleteDocument(id);
-            if(deleted){
-                return new ResponseEntity<>("deleted" ,HttpStatus.OK);
-            }else{
-                return new ResponseEntity<>("Not Found ",HttpStatus.NOT_FOUND);
+            if (deleted) {
+                response.put("message", "Deleted successfully");
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            } else {
+                response.put("message", "Document with ID " + id + " not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
-
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            response.put("message", "Internal server error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<String> updateDocument(
             @PathVariable Long id,
