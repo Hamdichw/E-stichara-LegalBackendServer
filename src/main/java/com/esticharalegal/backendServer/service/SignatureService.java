@@ -9,6 +9,7 @@ import com.esticharalegal.backendServer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
@@ -39,21 +40,24 @@ public class SignatureService{
         Document document = documentOptional.get();
 
         try {
-
             byte[] documentContent = document.getContent();
             PrivateKey privateKey = getPrivateKeyFromBytes(user.getPrivateKey());
-            // Add additional text at the bottom of the document content
-            String additionalText = "Digitally Signed By: " + user.getFirstName()+ " " + user.getLastName()+ "\nDate: " + LocalDateTime.now();
-            byte[] signedDocumentContent = addAdditionalText(documentContent, additionalText);
+
             String signature = signDocumentContent(documentContent, privateKey.getEncoded());
-            String documentText = new String(documentContent);
-            documentText += "\n\n" + additionalText;
+
+            // Append signature and date at the bottom right of the document content
+            String signedContent = new String(documentContent, StandardCharsets.UTF_8);
+            String signedBy = "Digitally Signed By: " + user.getUsername();
+            String date = "Date: " + LocalDateTime.now().toString();
+            String signatureBlock = signedBy + "\\n" + date;
+            signedContent += "\n\n" + signatureBlock;
+
             DocumentSigned documentSigned = new DocumentSigned();
             documentSigned.setDocument(document);
             documentSigned.setSigner(user);
             documentSigned.setSignedDate(LocalDateTime.now());
             documentSigned.setSignature(signature);
-            documentSigned.setContent(documentContent);
+            documentSigned.setContent(signedContent.getBytes(StandardCharsets.UTF_8));
 
             return documentSignedRepository.save(documentSigned);
         } catch (Exception e) {
