@@ -2,6 +2,7 @@ package com.esticharalegal.backendServer.controller;
 
 import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.model.Document;
+import com.esticharalegal.backendServer.model.DocumentSigned;
 import com.esticharalegal.backendServer.service.DocumentService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -130,6 +131,32 @@ public class DocumentController {
             Optional<Document> document = documentService.findDocumentById(id);
             if (document.isPresent()) {
                 Document foundDocument = document.get();
+
+                // Set the response content type as application/pdf
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                headers.setContentDispositionFormData("attachment", "document_" + id + ".pdf");
+
+                // Create InputStreamResource from the document content
+                InputStreamResource resource = new InputStreamResource(new ByteArrayInputStream(foundDocument.getContent()));
+
+                // Return ResponseEntity with file content and headers
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .body(resource);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    @GetMapping("/{id}/downloadSignedVersion")
+    public ResponseEntity<InputStreamResource> downloadDocumentSigned(@PathVariable Long id) {
+        try {
+            Optional<Document> document = documentService.findDocumentById(id);
+            if (document.isPresent()) {
+                DocumentSigned foundDocument = document.get().getDocumentSignedList().getLast();
 
                 // Set the response content type as application/pdf
                 HttpHeaders headers = new HttpHeaders();
