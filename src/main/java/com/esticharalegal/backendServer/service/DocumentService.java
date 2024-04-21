@@ -77,9 +77,8 @@ public class DocumentService {
             }
 
         }
-        else{
-            return  false;
-        }
+
+
 
         return false;
     }

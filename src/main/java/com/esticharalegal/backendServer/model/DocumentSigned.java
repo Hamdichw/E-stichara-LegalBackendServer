@@ -18,7 +18,7 @@ public class DocumentSigned {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long signID;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "DocumentID")
     private Document document;
 
