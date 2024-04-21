@@ -79,16 +79,16 @@ public class DocumentController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @DeleteMapping("/{id}/delete/{docId}")
-    public ResponseEntity<Map<String, String>> deleteDocument(@PathVariable Long id, @PathVariable Long docId) {
+    @DeleteMapping("/delete/{docId}")
+    public ResponseEntity<Map<String, String>> deleteDocument( @PathVariable Long docId) {
         Map<String, String> response = new HashMap<>();
         try {
-            boolean deleted = documentService.deleteDocument(id,docId);
+            boolean deleted = documentService.deleteDocument(docId);
             if (deleted) {
                 response.put("message", "Deleted successfully");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
             } else {
-                response.put("message", "Document with ID " + id + " not found");
+                response.put("message", "Document not found");
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
             }
         } catch (Exception e) {
