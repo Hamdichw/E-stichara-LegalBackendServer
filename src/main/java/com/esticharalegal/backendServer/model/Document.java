@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,4 +44,12 @@ public class Document {
     private byte[] content;
 
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL) // Cascade delete behavior
+    private List<DocumentShared> documentSharedList; // List of DocumentShared entities
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "document", cascade = CascadeType.ALL) // Cascade delete behavior
+    private List<DocumentSigned> documentSignedList; // List of DocumentSigned entities
 }

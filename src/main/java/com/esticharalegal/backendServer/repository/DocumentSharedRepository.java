@@ -1,5 +1,6 @@
 package com.esticharalegal.backendServer.repository;
 
+import com.esticharalegal.backendServer.model.Document;
 import com.esticharalegal.backendServer.model.DocumentShared;
 import com.esticharalegal.backendServer.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

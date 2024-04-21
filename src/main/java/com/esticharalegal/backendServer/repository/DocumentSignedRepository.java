@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface DocumentSignedRepository extends JpaRepository<DocumentSigned,Long> {
 
     List<DocumentSigned> findDocumentSignedByDocument(Document document);
+
 }
