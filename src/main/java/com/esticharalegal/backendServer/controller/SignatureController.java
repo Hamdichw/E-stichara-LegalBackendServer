@@ -37,9 +37,9 @@ public class SignatureController {
     @GetMapping("/verify")
     public ResponseEntity<Map<String, String>> verifySignature(
             @RequestParam("documentSignedId") Long documentSignedId,
-            @RequestParam("userId") Long userId
+            @RequestParam("userName") String userName
     ) throws AppException {
-        boolean isSignatureValid = signatureService.verifySignature(documentSignedId, userId);
+        boolean isSignatureValid = signatureService.verifySignature(documentSignedId, userName);
         Map<String, String> response = new HashMap<>();
 
         if (isSignatureValid) {

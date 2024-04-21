@@ -67,8 +67,8 @@ public class SignatureService{
         return null;
     }
 
-    public boolean verifySignature(Long documentId, Long userId) {
-        Optional<User> userOptional = userRepository.findById(userId);
+    public boolean verifySignature(Long documentId, String userName) {
+        Optional<User> userOptional = userRepository.findByUsername(userName);
         Optional<Document> documentOptional = documentRepository.findById(documentId);
 
         if (userOptional.isEmpty() || documentOptional.isEmpty()) {

@@ -34,7 +34,7 @@ public class DocumentService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             document.setUploadedBy(user);
-            document.setUploadedByUserName(user.getUsername());
+            document.setUploadedByUserName(user.getFirstName() + " " + user.getLastName());
             document.setUploadDate(LocalDateTime.now());
             return documentRepository.save(document);
         } else {
@@ -125,4 +125,7 @@ public class DocumentService {
         }
 
     }
+
+
+
 }

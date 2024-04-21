@@ -2,6 +2,7 @@ package com.esticharalegal.backendServer.repository;
 
 import com.esticharalegal.backendServer.model.Document;
 import com.esticharalegal.backendServer.model.DocumentSigned;
+import com.esticharalegal.backendServer.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,4 +14,6 @@ public interface DocumentSignedRepository extends JpaRepository<DocumentSigned,L
 
     List<DocumentSigned> findDocumentSignedByDocument(Document document);
 
+
+    List<DocumentSigned> findDocumentSignedBySignID(User user);
 }
