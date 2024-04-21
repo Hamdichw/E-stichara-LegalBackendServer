@@ -11,4 +11,5 @@ import java.util.List;
 @Repository
 public interface  DocumentSharedRepository  extends JpaRepository<DocumentShared, Long> {
     List<DocumentShared>  findBySharedWith(User user);
+    List<DocumentShared>  findDocumentSharedByDocument(Document document);
 }
