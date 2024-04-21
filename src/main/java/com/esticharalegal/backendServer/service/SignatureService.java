@@ -39,8 +39,12 @@ public class SignatureService{
         Document document = documentOptional.get();
 
         try {
+
             byte[] documentContent = document.getContent();
             PrivateKey privateKey = getPrivateKeyFromBytes(user.getPrivateKey());
+            // Add additional text at the bottom of the document content
+            String additionalText = "Digitally Signed By: " + user.getFirstName()+ " " + user.getLastName()+ "\nDate: " + LocalDateTime.now();
+            byte[] signedDocumentContent = addAdditionalText(documentContent, additionalText);
             String signature = signDocumentContent(documentContent, privateKey.getEncoded());
 
             DocumentSigned documentSigned = new DocumentSigned();
@@ -127,5 +131,11 @@ public class SignatureService{
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new RuntimeException(e);
         }
+    }
+    private byte[] addAdditionalText(byte[] documentContent, String additionalText) {
+        // Concatenate the additional text at the bottom of the document content
+        String documentText = new String(documentContent);
+        documentText += "\n\n" + additionalText;
+        return documentText.getBytes();
     }
 }

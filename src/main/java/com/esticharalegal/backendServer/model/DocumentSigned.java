@@ -1,5 +1,6 @@
 package com.esticharalegal.backendServer.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -33,5 +34,9 @@ public class DocumentSigned {
     @Column(name = "SignedDate")
     private LocalDateTime signedDate;
 
+    @Lob
+    @Column(columnDefinition = "LONGBLOB")
+    @JsonIgnore
+    private byte[] content;
     // Getters and setters
 }

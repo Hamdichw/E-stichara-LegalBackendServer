@@ -3,9 +3,11 @@ package com.esticharalegal.backendServer.service;
 import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.model.Document;
 import com.esticharalegal.backendServer.model.DocumentShared;
+import com.esticharalegal.backendServer.model.DocumentSigned;
 import com.esticharalegal.backendServer.model.User;
 import com.esticharalegal.backendServer.repository.DocumentRepository;
 import com.esticharalegal.backendServer.repository.DocumentSharedRepository;
+import com.esticharalegal.backendServer.repository.DocumentSignedRepository;
 import com.esticharalegal.backendServer.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.mapstruct.control.MappingControl;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 public class DocumentService {
     private final DocumentRepository documentRepository;
     private final DocumentSharedRepository documentSharedRepository;
+    private  final DocumentSignedRepository documentSignedRepository;
     private final UserRepository userRepository;
 
     public Document saveDocument(Document document, Long id) {
@@ -59,6 +62,10 @@ public class DocumentService {
     public Optional<Document> findDocumentById(Long id) {
         return documentRepository.findById(id);
     }
+    public Optional<DocumentSigned> findDocumentSignedById(Long id) {
+        return documentSignedRepository.findById(id);
+    }
+
     public boolean deleteDocument(Long id ,Long docId) {
         Optional<User> user = userRepository.findById(id);
         Optional<Document> document = documentRepository.findById(docId);
