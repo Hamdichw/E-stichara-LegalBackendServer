@@ -28,13 +28,22 @@ public class AppointmentController {
             @PathVariable Long idLawyer,
             @RequestParam("email") String email,
             @RequestParam("start") String start,
-            @RequestParam("end") String end
-    ) throws AppException, ParseException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+            @RequestParam(name = "end", required = false) String end
+    ) throws AppException {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Date startDate;
-        Date endDate ;
-        startDate = dateFormat.parse(start);
-        endDate = dateFormat.parse(end);
+        Date endDate = null;
+        try {
+            startDate = dateFormat.parse(start);
+            if (end != null) {
+                endDate = dateFormat.parse(end);
+            }
+        } catch (ParseException e) {
+            // Handle parsing exception
+            e.printStackTrace();
+            return; // Or throw an exception
+        }
+
         Appointment appointment = new Appointment();
         appointment.setStart(startDate);
         appointment.setEnd(endDate);
