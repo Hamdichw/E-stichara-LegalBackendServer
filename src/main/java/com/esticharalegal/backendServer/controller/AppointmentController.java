@@ -23,7 +23,7 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService ;
 
-    @PostMapping("/add/{idLawyer}")
+    @GetMapping("/add/{idLawyer}")
     public void addAppointment(
             @PathVariable Long idLawyer,
             @RequestParam("email") String email,
