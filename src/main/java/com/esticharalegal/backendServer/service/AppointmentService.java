@@ -20,7 +20,16 @@ public class AppointmentService {
     private  final AppointmentRepository appointmentRepository;
     private final UserRepository userRepository;
 
-    public void addAppointment(Appointment appointment) throws AppException {
+    public void addAppointment(Long idLawyer , String email ,Appointment appointment) throws AppException {
+        Optional<User> client = userRepository.findByEmail(email);
+        Optional<User> lawyer = userRepository.findById(idLawyer);
+
+        // Check if client and lawyer exist
+        if (client.isEmpty() || lawyer.isEmpty()) {
+            throw new AppException("Client or Lawyer not found", HttpStatus.NOT_FOUND);
+        }
+        appointment.setClient(client.get());
+        appointment.setLawyer(lawyer.get());
         if (appointmentRepository.existsByClientAndLawyerAndStart(appointment.getClient(), appointment.getLawyer(), appointment.getStart())) {
             throw new AppException("Appointment already exists for client, lawyer, and start time",HttpStatus.BAD_REQUEST);
         }

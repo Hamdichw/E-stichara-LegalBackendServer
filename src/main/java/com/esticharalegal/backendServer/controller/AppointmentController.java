@@ -7,7 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -17,14 +19,20 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService ;
 
-    @PostMapping("/add")
-    public ResponseEntity<String> addAppointment(@RequestBody Appointment appointment) {
-        try {
-            appointmentService.addAppointment(appointment);
-            return ResponseEntity.ok("Appointment added successfully");
-        } catch (RuntimeException | AppException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    @PostMapping("/add/{idLAwyer}")
+    public void addAppointment(
+            @PathVariable Long idLAwyer ,
+            @RequestParam("email") String email,
+            @RequestParam("start") Date start,
+            @RequestParam(name = "end", required = false) Date end
+    ) throws AppException {
+        Appointment appointment = new Appointment();
+        if(end != null){
+          appointment.setEnd(end);
         }
+        appointment.setStart(start);
+        this.appointmentService.addAppointment(idLAwyer , email ,appointment);
+
     }
     @PostMapping("/request")
     public ResponseEntity<String> addRequestAppointment(@RequestBody Appointment appointment) {
