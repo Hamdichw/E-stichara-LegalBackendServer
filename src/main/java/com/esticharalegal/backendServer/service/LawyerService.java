@@ -101,6 +101,7 @@ public class LawyerService {
                 chatRepository.save(chat);
                  throw new AppException("Connection added successfully", HttpStatus.CREATED);
             } else {
+                appointmentService.acceptAppointment(appointmentId);
                 throw new AppException("Connection already exists", HttpStatus.BAD_REQUEST);
             }
         } else {
