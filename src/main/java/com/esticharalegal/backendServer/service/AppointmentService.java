@@ -37,26 +37,17 @@ public class AppointmentService {
 //        throw new AppException("Appointment created",HttpStatus.CREATED);
 //
 //    }
+
+
     public void addAppointment(Appointment appointment) throws AppException {
-        Optional<User> client = userRepository.findByEmail(appointment.getClient().getEmail());
-        Optional<User> lawyer = userRepository.findById(appointment.getLawyer().getUserID());
-
-        // Check if client and lawyer exist
-        if (client.isEmpty() || lawyer.isEmpty()) {
-            throw new AppException("Client or Lawyer not found", HttpStatus.NOT_FOUND);
-        }
-
-        if (appointmentRepository.existsByClientAndLawyerAndStart(client.get(), lawyer.get(), appointment.getStart())) {
+        if (appointmentRepository.existsByClientAndLawyerAndStart(appointment.getClient(), appointment.getLawyer(), appointment.getStart())) {
             throw new AppException("Appointment already exists for client, lawyer, and start time",HttpStatus.BAD_REQUEST);
+        }else{
+            appointment.setStatus(AppointmentType.Accepted);
+            appointmentRepository.save(appointment);
         }
-        appointment.setClient(client.get());
-        appointment.setLawyer(lawyer.get());
-        appointmentRepository.save(appointment);
-        throw new AppException("Appointment created",HttpStatus.CREATED);
 
     }
-
-
     public void addRequestAppointment(Appointment appointment) throws AppException {
         if (appointmentRepository.existsByClientAndLawyerAndStart(appointment.getClient(), appointment.getLawyer(), appointment.getStart())) {
             throw new AppException("Appointment already exists for client, lawyer, and start time",HttpStatus.BAD_REQUEST);
