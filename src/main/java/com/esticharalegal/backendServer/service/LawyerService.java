@@ -4,9 +4,11 @@ package com.esticharalegal.backendServer.service;
 import com.esticharalegal.backendServer.dto.*;
 import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.mapper.UserMapper;
+import com.esticharalegal.backendServer.model.Chat;
 import com.esticharalegal.backendServer.model.User;
 
 import com.esticharalegal.backendServer.Enum.UserType;
+import com.esticharalegal.backendServer.repository.ChatRepository;
 import com.esticharalegal.backendServer.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -39,7 +41,9 @@ public class LawyerService {
 
     private final CloudService cloudService;
 
+    private  final AppointmentService appointmentService;
 
+    private final ChatRepository chatRepository;
     public LawyerDTO login(CredentialsLawyerDTO credentialsLawyerDTO) throws AppException {
         User user = userRepository.findByLicenseNumberAndEmail(credentialsLawyerDTO.licenseNumber() , credentialsLawyerDTO.email())
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
@@ -76,19 +80,34 @@ public class LawyerService {
                 .orElseThrow(() -> new AppException("Unknown user", HttpStatus.NOT_FOUND));
         return lawyerMapper.toLawyerDto(user);
     }
-    public void addConnection(Long userId, Long connectionUserId) throws AppException {
+    public void addConnection(Long userId, Long connectionUserId, Long appointmentId) throws AppException {
         Optional<User> user = userRepository.findById(userId);
         Optional<User> connectionUser = userRepository.findById(connectionUserId);
+
         if (user.isPresent() && connectionUser.isPresent()) {
             User userEntity = user.get();
             User connectionUserEntity = connectionUser.get();
-            userEntity.getConnections().add(connectionUserEntity);
-            connectionUserEntity.getConnections().add(userEntity);
-            userRepository.save(userEntity);
-            userRepository.save(connectionUserEntity);
-         throw new AppException("Connection added successfully", HttpStatus.CREATED);
+
+            // Check if connectionUserEntity already exists in userEntity's connections
+            if (!userEntity.getConnections().contains(connectionUserEntity)) {
+                userEntity.getConnections().add(connectionUserEntity);
+                connectionUserEntity.getConnections().add(userEntity);
+                userRepository.save(userEntity);
+                userRepository.save(connectionUserEntity);
+                appointmentService.acceptAppointment(appointmentId);
+                Chat chat =  new Chat();
+                chat.setFirstUser(userEntity);
+                chat.setSecondUser(connectionUserEntity);
+                chatRepository.save(chat);
+                 throw new AppException("Connection added successfully", HttpStatus.CREATED);
+            } else {
+                throw new AppException("Connection already exists", HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            throw new AppException("One or both users not found", HttpStatus.NOT_FOUND);
         }
     }
+
 
     public void  updateClient(Long userId , NewClientDTO newClientDTO) throws AppException {
         Optional<User> client =  userRepository.findById(userId);

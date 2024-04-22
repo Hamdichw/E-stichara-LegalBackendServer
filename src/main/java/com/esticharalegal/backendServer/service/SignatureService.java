@@ -138,10 +138,5 @@ public class SignatureService{
             throw new RuntimeException(e);
         }
     }
-    private byte[] addAdditionalText(byte[] documentContent, String additionalText) {
-        // Concatenate the additional text at the bottom of the document content
-        String documentText = new String(documentContent);
-        documentText += "\n\n" + additionalText;
-        return documentText.getBytes();
-    }
+
 }
