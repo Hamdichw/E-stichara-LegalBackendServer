@@ -1,5 +1,6 @@
 package com.esticharalegal.backendServer.controller;
 
+import com.esticharalegal.backendServer.Enum.AppointmentType;
 import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.model.Appointment;
 import com.esticharalegal.backendServer.service.AppointmentService;
@@ -31,6 +32,7 @@ public class AppointmentController {
           appointment.setEnd(end);
         }
         appointment.setStart(start);
+        appointment.setStatus(AppointmentType.Accepted);
         this.appointmentService.addAppointment(idLAwyer , email ,appointment);
 
     }
