@@ -40,7 +40,8 @@ public class AppointmentService {
 
 
     public void addAppointment(Appointment appointment) throws AppException {
-        if (appointmentRepository.existsByClientAndLawyerAndStart(appointment.getClient(), appointment.getLawyer(), appointment.getStart())) {
+        Optional<User> client = userRepository.findByEmail(appointment.getClient().getEmail());
+        if (appointmentRepository.existsByClientAndLawyerAndStart(client.get(), appointment.getLawyer(), appointment.getStart())) {
             throw new AppException("Appointment already exists for client, lawyer, and start time",HttpStatus.BAD_REQUEST);
         }else{
             appointment.setStatus(AppointmentType.Accepted);
