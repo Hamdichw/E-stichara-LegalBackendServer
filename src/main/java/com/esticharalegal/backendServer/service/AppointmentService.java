@@ -34,6 +34,8 @@ public class AppointmentService {
             throw new AppException("Appointment already exists for client, lawyer, and start time",HttpStatus.BAD_REQUEST);
         }
         appointmentRepository.save(appointment);
+        throw new AppException("Appointment created",HttpStatus.CREATED);
+
     }
 
 
