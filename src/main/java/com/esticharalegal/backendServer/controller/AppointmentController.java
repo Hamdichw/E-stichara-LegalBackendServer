@@ -23,10 +23,8 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService ;
 
-    @GetMapping("/add")
-    public void addAppointment(
-            @PathVariable Long idLawyer,
-           @RequestBody Appointment appointment
+    @PostMapping("/add")
+    public void addAppointment(@RequestBody Appointment appointment
     ) throws AppException {
         this.appointmentService.addAppointment(appointment);
     }
