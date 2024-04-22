@@ -41,7 +41,7 @@ public class AppointmentController {
         } catch (ParseException e) {
             // Handle parsing exception
             e.printStackTrace();
-            return; // Or throw an exception
+            throw new AppException("error" , HttpStatus.CONFLICT);
         }
 
         Appointment appointment = new Appointment();
