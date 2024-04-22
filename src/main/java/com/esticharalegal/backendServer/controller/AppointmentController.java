@@ -30,7 +30,7 @@ public class AppointmentController {
             @RequestParam("start") String start,
             @RequestParam(name = "end", required = false) String end
     ) throws AppException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
         Date startDate;
         Date endDate = null;
         try {
