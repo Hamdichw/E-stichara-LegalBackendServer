@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -20,21 +23,32 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService ;
 
-    @PostMapping("/add/{idLAwyer}")
+    @PostMapping("/add/{idLawyer}")
     public void addAppointment(
-            @PathVariable Long idLAwyer ,
+            @PathVariable Long idLawyer,
             @RequestParam("email") String email,
-            @RequestParam("start") Date start,
-            @RequestParam(name = "end", required = false) Date end
+            @RequestParam("start") String start,
+            @RequestParam(name = "end", required = false) String end
     ) throws AppException {
-        Appointment appointment = new Appointment();
-        if(end != null){
-          appointment.setEnd(end);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Date startDate;
+        Date endDate = null;
+        try {
+            startDate = dateFormat.parse(start);
+            if (end != null) {
+                endDate = dateFormat.parse(end);
+            }
+        } catch (ParseException e) {
+            // Handle parsing exception
+            e.printStackTrace();
+            return; // Or throw an exception
         }
-        appointment.setStart(start);
-        appointment.setStatus(AppointmentType.Accepted);
-        this.appointmentService.addAppointment(idLAwyer , email ,appointment);
 
+        Appointment appointment = new Appointment();
+        appointment.setStart(startDate);
+        appointment.setEnd(endDate);
+        appointment.setStatus(AppointmentType.Accepted);
+        this.appointmentService.addAppointment(idLawyer, email, appointment);
     }
     @PostMapping("/request")
     public ResponseEntity<String> addRequestAppointment(@RequestBody Appointment appointment) {
