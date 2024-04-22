@@ -23,32 +23,12 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService ;
 
-    @GetMapping("/add/{idLawyer}")
+    @GetMapping("/add")
     public void addAppointment(
             @PathVariable Long idLawyer,
-            @RequestParam("email") String email,
-            @RequestParam("start") String start,
-            @RequestParam(name = "end", required = false) String end
+           @RequestBody Appointment appointment
     ) throws AppException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Date startDate;
-        Date endDate = null;
-        try {
-            startDate = dateFormat.parse(start);
-            if (end != null) {
-                endDate = dateFormat.parse(end);
-            }
-        } catch (ParseException e) {
-            // Handle parsing exception
-            e.printStackTrace();
-            throw new AppException("error" , HttpStatus.CONFLICT);
-        }
-
-        Appointment appointment = new Appointment();
-        appointment.setStart(startDate);
-        appointment.setEnd(endDate);
-        appointment.setStatus(AppointmentType.Accepted);
-        this.appointmentService.addAppointment(idLawyer, email, appointment);
+        this.appointmentService.addAppointment(appointment);
     }
     @PostMapping("/request")
     public ResponseEntity<String> addRequestAppointment(@RequestBody Appointment appointment) {
