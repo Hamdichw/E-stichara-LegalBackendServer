@@ -45,12 +45,12 @@ public class AppointmentService {
         if (client.isEmpty() || lawyer.isEmpty()) {
             throw new AppException("Client or Lawyer not found", HttpStatus.NOT_FOUND);
         }
-        appointment.setClient(client.get());
-        appointment.setLawyer(lawyer.get());
-        appointment.setStatus(AppointmentType.Accepted);
-        if (appointmentRepository.existsByClientAndLawyerAndStart(appointment.getClient(), appointment.getLawyer(), appointment.getStart())) {
+
+        if (appointmentRepository.existsByClientAndLawyerAndStart(client.get(), lawyer.get(), appointment.getStart())) {
             throw new AppException("Appointment already exists for client, lawyer, and start time",HttpStatus.BAD_REQUEST);
         }
+        appointment.setClient(client.get());
+        appointment.setLawyer(lawyer.get());
         appointmentRepository.save(appointment);
         throw new AppException("Appointment created",HttpStatus.CREATED);
 
