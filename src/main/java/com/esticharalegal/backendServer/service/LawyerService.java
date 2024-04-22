@@ -99,10 +99,10 @@ public class LawyerService {
                 chat.setFirstUser(userEntity);
                 chat.setSecondUser(connectionUserEntity);
                 chatRepository.save(chat);
-                 throw new AppException("Connection added successfully", HttpStatus.CREATED);
+                 throw new AppException("Connection added successfully , Appointment added successfully", HttpStatus.CREATED);
             } else {
                 appointmentService.acceptAppointment(appointmentId);
-                throw new AppException("Connection already exists", HttpStatus.BAD_REQUEST);
+                throw new AppException(" Appointment added successfully",  HttpStatus.CREATED);
             }
         } else {
             throw new AppException("One or both users not found", HttpStatus.NOT_FOUND);
