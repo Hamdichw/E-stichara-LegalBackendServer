@@ -70,6 +70,7 @@ public class LawyerService {
         user.setPassword(passwordEncoder.encode(CharBuffer.wrap(userDto.password())));
         user.generateKeyPair();
         user.setRole(UserType.LAWYER);
+        user.setAddress("Tunis");
         User savedUser = userRepository.save(user);
 
         return lawyerMapper.toLawyerDto(savedUser);
