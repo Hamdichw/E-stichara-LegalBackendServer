@@ -61,4 +61,8 @@ public class AppointmentController {
     public List<Appointment> getAllAppointmentsByLawyerId(@PathVariable Long lawyerId) throws AppException {
             return appointmentService.getAllAppointmentsByLawyerId(lawyerId);
     }
+    @DeleteMapping("/{Id}")
+    public void deleteAppointment(@PathVariable Long Id) throws AppException {
+         appointmentService.deleteAppointmentsById(Id);
+    }
 }

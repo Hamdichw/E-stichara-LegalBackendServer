@@ -104,4 +104,14 @@ public class AppointmentService {
         }
 
     }
+    public  void deleteAppointmentsById(Long id)throws  AppException{
+        Optional<Appointment> appointment = appointmentRepository.findById(id);
+        if(appointment.isPresent()){
+            appointmentRepository.deleteById(id);
+            throw  new AppException("deleted" ,HttpStatus.OK);
+        }else{
+            throw  new AppException("Not deleted" ,HttpStatus.OK);
+
+        }
+    }
 }
