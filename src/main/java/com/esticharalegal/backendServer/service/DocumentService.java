@@ -75,11 +75,11 @@ public class DocumentService {
         Optional<Document> document = documentRepository.findById(docId);
         if (document.isPresent()) {
             // Check if the user uploaded this document
-            if (user.get().getUsername().equals(document.get().getUploadedByUserName())) {
+            if (user.get().getUsername().equals(document.get().getUploadedBy().getUsername())) {
                 documentRepository.deleteById(docId);
                 return true;
             } else {
-                documentSharedRepository.deleteAllByDocument(document.get());
+                documentSharedRepository.deleteDocumentSharedByDocument_DocumentID(docId);
                 return true;
             }
         }
