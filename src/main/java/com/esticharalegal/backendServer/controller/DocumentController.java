@@ -84,7 +84,7 @@ public class DocumentController {
     public ResponseEntity<Map<String, String>> deleteDocument(@PathVariable Long id , @PathVariable Long docId) {
         Map<String, String> response = new HashMap<>();
 
-            boolean deleted = documentService.deleteDocument(id ,docId);
+            boolean deleted = documentService.deleteDocument(id,docId);
             if (deleted) {
                 response.put("message", "Deleted successfully");
                 return ResponseEntity.status(HttpStatus.OK).body(response);

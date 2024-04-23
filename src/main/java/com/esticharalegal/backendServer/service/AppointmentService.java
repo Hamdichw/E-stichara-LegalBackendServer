@@ -49,6 +49,7 @@ public class AppointmentService {
             newapp.setLawyer(appointment.getLawyer());
             newapp.setStatus(AppointmentType.Accepted);
             newapp.setStart(appointment.getStart());
+            newapp.setEnd(appointment.getEnd());
 
             appointmentRepository.save(newapp);
             throw new AppException("Created", HttpStatus.CREATED);
