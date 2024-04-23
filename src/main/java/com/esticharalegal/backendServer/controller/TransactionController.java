@@ -12,6 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/transaction")
+
 public class TransactionController {
     private final TransactionService transactionService ;
     @GetMapping("/lawyer/{lawyerId}")
