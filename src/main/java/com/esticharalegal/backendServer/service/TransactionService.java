@@ -21,7 +21,7 @@ public class TransactionService {
     }
 
     public Transaction addTransactionByLawyerId(Transaction transaction, Long lawyerId) {
-        transaction.setLawyer(userRepository.findById(lawyerId).orElse(null));
+        transaction.setLawyer(userRepository.findById(lawyerId).get());
         return transactionRepository.save(transaction);
     }
 

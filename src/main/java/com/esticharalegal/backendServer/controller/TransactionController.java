@@ -22,8 +22,16 @@ public class TransactionController {
     }
 
     @PostMapping("/lawyer/{lawyerId}")
-    public ResponseEntity<Transaction> addTransactionByLawyerId(@RequestBody Transaction transaction, @PathVariable Long lawyerId) {
-        Transaction newTransaction = transactionService.addTransactionByLawyerId(transaction, lawyerId);
+    public ResponseEntity<Transaction> addTransactionByLawyerId(
+            @RequestParam("type") String type,
+            @RequestParam("amount") String amount,
+            @RequestParam("date") String date
+            , @PathVariable Long lawyerId) {
+        Transaction addTransaction = new Transaction();
+        addTransaction.setAmount(amount);
+        addTransaction.setType(type);
+        addTransaction.setDate(date);
+        Transaction newTransaction = transactionService.addTransactionByLawyerId(addTransaction, lawyerId);
         return ResponseEntity.status(HttpStatus.CREATED).body(newTransaction);
     }
 
