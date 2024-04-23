@@ -52,6 +52,7 @@ public class AppointmentService {
 
             appointmentRepository.save(newapp);
             throw new AppException("Created", HttpStatus.CREATED);
+
         }
     }
     public void addRequestAppointment(Appointment appointment) throws AppException {
