@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -24,8 +26,8 @@ public class TransactionController {
     @PostMapping("/lawyer/{lawyerId}")
     public ResponseEntity<Transaction> addTransactionByLawyerId(
             @RequestParam("type") String type,
-            @RequestParam("amount") String amount,
-            @RequestParam("date") String date
+            @RequestParam("amount") BigDecimal amount,
+            @RequestParam("date") Date date
             , @PathVariable Long lawyerId) {
         Transaction addTransaction = new Transaction();
         addTransaction.setAmount(amount);
