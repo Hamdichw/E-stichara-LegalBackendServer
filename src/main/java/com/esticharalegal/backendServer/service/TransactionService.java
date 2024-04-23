@@ -46,6 +46,9 @@ public class TransactionService {
                 if (updatedTransaction.getDate() != null) {
                     transaction.setDate(updatedTransaction.getDate());
                 }
+                if (updatedTransaction.getAmount() != null) {
+                    transaction.setAmount(updatedTransaction.getAmount());
+                }
                 return transactionRepository.save(transaction);
             }
         }
