@@ -79,7 +79,7 @@ public class DocumentService {
                 documentRepository.deleteById(docId);
                 return true;
             } else {
-                documentSharedRepository.deleteDocumentSharedByDocument_DocumentID(docId);
+                documentSharedRepository.deleteAllByDocument_DocumentIDAndSharedWith_UserID(docId,id);
                 return true;
             }
         }
