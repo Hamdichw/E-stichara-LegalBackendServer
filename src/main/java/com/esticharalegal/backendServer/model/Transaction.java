@@ -20,13 +20,13 @@ public class Transaction {
     private Long transactionsID;
 
     @Column(name = "amount")
-    private String amount;
+    private BigDecimal amount;
 
     @Column(name = "type")
     private String type;
 
     @Column(name = "date")
-    private String date;
+    private Date date;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lawyer_id")
     private User lawyer;
