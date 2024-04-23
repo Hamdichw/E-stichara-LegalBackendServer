@@ -17,7 +17,7 @@ import java.util.Date;
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int transactionsID;
+    private Long transactionsID;
 
     @Column(name = "amount")
     private BigDecimal amount;
@@ -31,8 +31,6 @@ public class Transaction {
     @JoinColumn(name = "lawyer_id")
     private User lawyer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
-    private User client;
+
 
 }

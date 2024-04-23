@@ -31,4 +31,7 @@ public interface TransactionRepository extends JpaRepository<Transaction,Long> {
             "GROUP BY MONTH(t.date) " +
             "ORDER BY MONTH(t.date)")
     List<Object[]> getMonthlyIncomeAndOutcomeFor12Months(Long idLawyer);
+
+
+    List<Transaction> findAllByLawyer_UserID(Long userId);
 }
