@@ -3,11 +3,14 @@ package com.esticharalegal.backendServer.controller;
 import com.esticharalegal.backendServer.model.Transaction;
 import com.esticharalegal.backendServer.service.TransactionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -26,13 +29,21 @@ public class TransactionController {
     @PostMapping("/lawyer/{lawyerId}")
     public ResponseEntity<Transaction> addTransactionByLawyerId(
             @RequestParam("type") String type,
-            @RequestParam("amount") BigDecimal amount,
-            @RequestParam("date") Date date
+            @RequestParam("amount") String amount,
+            @RequestParam("date") @DateTimeFormat(pattern="yyyy-MM-dd") String date
             , @PathVariable Long lawyerId) {
+        BigDecimal transactionAmount = new BigDecimal(amount);
+        Date inputdate;
+        try {
+            inputdate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        } catch (ParseException e) {
+            // Handle parsing exception
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         Transaction addTransaction = new Transaction();
-        addTransaction.setAmount(amount);
+        addTransaction.setAmount(transactionAmount); // this setAmount set a Bigdicimal
         addTransaction.setType(type);
-        addTransaction.setDate(date);
+        addTransaction.setDate(inputdate); // the  setDate had date
         Transaction newTransaction = transactionService.addTransactionByLawyerId(addTransaction, lawyerId);
         return ResponseEntity.status(HttpStatus.CREATED).body(newTransaction);
     }
