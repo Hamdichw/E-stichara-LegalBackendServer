@@ -17,7 +17,7 @@ public class DocumentShared {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long shareID;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "DocumentID")
     private Document document;
 

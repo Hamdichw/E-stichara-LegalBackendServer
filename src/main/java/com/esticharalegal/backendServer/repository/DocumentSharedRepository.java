@@ -13,5 +13,6 @@ public interface  DocumentSharedRepository  extends JpaRepository<DocumentShared
     List<DocumentShared>  findBySharedWith(User user);
     List<DocumentShared>  findDocumentSharedByDocument(Document document);
 
-    boolean deleteDocumentSharedByDocument_DocumentID(Long id);
+    void deleteDocumentSharedByDocument(Document document);
+    void deleteAllByDocument(Document document);
 }
