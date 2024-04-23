@@ -47,7 +47,7 @@ public class AppointmentService {
             newapp.setStatus(AppointmentType.Accepted);
             newapp.setStart(appointment.getStart());
 
-            appointmentRepository.save(appointment);
+            appointmentRepository.save(newapp);
         throw  new AppException("Created" ,HttpStatus.CREATED);
 
     }
