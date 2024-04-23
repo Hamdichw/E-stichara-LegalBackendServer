@@ -47,6 +47,7 @@ public class ClientService {
             User newUser = clientMapper.credentialsGoogleToUser(credentialsGoogle);
             newUser.generateKeyPair();
             newUser.setRole(UserType.CLIENT);
+            newUser.setPassword("GoogleUser");
             User savedUser = userRepository.save(newUser);
             return clientMapper.toClientDto(savedUser);
         }
