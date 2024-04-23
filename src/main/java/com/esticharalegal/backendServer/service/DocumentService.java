@@ -79,8 +79,11 @@ public class DocumentService {
                 documentRepository.deleteById(docId);
                 return true;
             } else {
-                documentSharedRepository.deleteAllByDocument_DocumentIDAndSharedWith_UserID(docId,id);
-                return true;
+                List<DocumentShared> documentShareds = documentSharedRepository.findDocumentSharedByDocumentAndAndSharedWith(document.get(),user.get());
+                if (!documentShareds.isEmpty()) {
+                    documentSharedRepository.deleteAll(documentShareds);
+                    return true;
+                }
             }
         }
         return false; // If none of the conditions match, return false
