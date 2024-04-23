@@ -41,6 +41,9 @@ public class AppointmentService {
 
     public void addAppointment(Appointment appointment) throws AppException {
         Optional<User> client = userRepository.findByEmail(appointment.getClient().getEmail());
+        if (appointmentRepository.existsByClientAndLawyerAndStart(appointment.getClient(), appointment.getLawyer(), appointment.getStart())) {
+            throw new AppException("Appointment already exists for client, lawyer, and start time",HttpStatus.BAD_REQUEST);
+        }else {
             Appointment newapp = new Appointment();
             newapp.setClient(client.get());
             newapp.setLawyer(appointment.getLawyer());
@@ -48,8 +51,8 @@ public class AppointmentService {
             newapp.setStart(appointment.getStart());
 
             appointmentRepository.save(newapp);
-        throw  new AppException("Created" ,HttpStatus.CREATED);
-
+            throw new AppException("Created", HttpStatus.CREATED);
+        }
     }
     public void addRequestAppointment(Appointment appointment) throws AppException {
         if (appointmentRepository.existsByClientAndLawyerAndStart(appointment.getClient(), appointment.getLawyer(), appointment.getStart())) {
