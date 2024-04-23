@@ -113,8 +113,14 @@ public class DocumentService {
         } catch (NumberFormatException e) {
             throw new AppException("Invalid ID format", HttpStatus.BAD_REQUEST);
         }
+
+
         Optional<Document> existingDocumentOptional = documentRepository.findById(docIdLong);
         Optional<User> existingUserOptional = userRepository.findByEmail(userId);
+        List<DocumentShared> documentSharedExist = documentSharedRepository.findDocumentSharedByDocumentAndAndSharedWith(existingDocumentOptional.get(),existingUserOptional.get());
+        if(!documentSharedExist.isEmpty()){
+                throw  new AppException("alreaday shared",HttpStatus.OK);
+        }
         if(existingUserOptional.isEmpty() || existingDocumentOptional.isEmpty()){
             throw  new AppException("error ", HttpStatus.NOT_FOUND);
         }else{
