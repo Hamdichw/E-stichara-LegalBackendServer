@@ -1,9 +1,11 @@
 package com.esticharalegal.backendServer.service;
 
+import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.model.Transaction;
 import com.esticharalegal.backendServer.repository.TransactionRepository;
 import com.esticharalegal.backendServer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,10 +27,11 @@ public class TransactionService {
         return transactionRepository.save(transaction);
     }
 
-    public void deleteTransactionByLawyerId(Long transactionId, Long lawyerId) {
+    public void deleteTransactionByLawyerId(Long transactionId, Long lawyerId) throws AppException {
         Optional<Transaction> transaction = transactionRepository.findById(transactionId);
         if (transaction.isPresent() && transaction.get().getLawyer().getUserID() == lawyerId) {
             transactionRepository.deleteById(transactionId);
+            throw  new AppException("deleted" , HttpStatus.OK);
         }
     }
 

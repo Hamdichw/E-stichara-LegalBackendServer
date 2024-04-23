@@ -1,5 +1,6 @@
 package com.esticharalegal.backendServer.controller;
 
+import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.model.Transaction;
 import com.esticharalegal.backendServer.service.TransactionService;
 import lombok.RequiredArgsConstructor;
@@ -49,18 +50,32 @@ public class TransactionController {
     }
 
     @DeleteMapping("/lawyer/{lawyerId}/{transactionId}")
-    public ResponseEntity<Void> deleteTransactionByLawyerId(@PathVariable Long transactionId, @PathVariable Long lawyerId) {
+    public void deleteTransactionByLawyerId(@PathVariable Long transactionId, @PathVariable Long lawyerId) throws AppException {
         transactionService.deleteTransactionByLawyerId(transactionId, lawyerId);
-        return ResponseEntity.noContent().build();
     }
 
 
     @PutMapping("/lawyer/{lawyerId}/{transactionId}")
     public ResponseEntity<Transaction> updateTransactionByLawyerId(
             @PathVariable Long transactionId,
-            @RequestBody Transaction updatedTransaction,
+            @RequestParam("type") String type,
+            @RequestParam("amount") String amount,
+            @RequestParam("date") @DateTimeFormat(pattern="yyyy-MM-dd") String date ,
             @PathVariable Long lawyerId) {
-        Transaction transaction = transactionService.updateTransactionByLawyerId(transactionId, updatedTransaction, lawyerId);
+
+        BigDecimal transactionAmount = new BigDecimal(amount);
+        Date inputdate;
+        try {
+            inputdate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        } catch (ParseException e) {
+            // Handle parsing exception
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        Transaction addTransaction = new Transaction();
+        addTransaction.setAmount(transactionAmount); // this setAmount set a Bigdicimal
+        addTransaction.setType(type);
+        addTransaction.setDate(inputdate); // the  setDate had date
+        Transaction transaction = transactionService.updateTransactionByLawyerId(transactionId, addTransaction, lawyerId);
         if (transaction != null) {
             return ResponseEntity.ok(transaction);
         }
