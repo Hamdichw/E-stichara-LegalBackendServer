@@ -84,7 +84,7 @@ public class DocumentService {
                 for (DocumentShared documentShared : documentShareds) {
                     if (documentShared.getSharedWith().getUsername().equals(user.get().getUsername())) {
                         // If the document is shared with the user, delete it
-                        documentRepository.deleteById(docId);
+                        documentSharedRepository.deleteDocumentSharedByDocument_DocumentID(docId);
                     }
                 }
                 return true;
