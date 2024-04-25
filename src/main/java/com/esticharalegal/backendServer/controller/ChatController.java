@@ -56,10 +56,10 @@ public class ChatController {
             if (lastMessage != null) {
                 return ResponseEntity.ok(lastMessage);
             } else {
-                return new ResponseEntity("No messages found in the chat", HttpStatus.NOT_FOUND);
+                return new ResponseEntity("No messages found in the chat", HttpStatus.OK);
             }
         } catch (AppException e) {
-            return new ResponseEntity("Chat not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity("Chat not found", HttpStatus.OK);
         }
     }
 
