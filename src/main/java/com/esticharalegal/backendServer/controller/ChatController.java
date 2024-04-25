@@ -55,12 +55,11 @@ public class ChatController {
             Message lastMessage = this.chatService.getLastMessageInChat(chatId);
             if (lastMessage != null) {
                 return ResponseEntity.ok(lastMessage);
-            } else {
-                return new ResponseEntity("No messages found in the chat", HttpStatus.OK);
             }
         } catch (AppException e) {
             return new ResponseEntity("Chat not found", HttpStatus.OK);
         }
+        return null;
     }
 
     @GetMapping("/all/messages/from/chat/{chatId}")
