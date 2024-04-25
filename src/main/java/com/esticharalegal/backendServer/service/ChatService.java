@@ -54,7 +54,7 @@ public class ChatService {
         Optional<Chat> chat = chatRepository.findById(chatId);
 
         if(chat.isEmpty()){
-            throw new AppException();
+            throw new AppException("No message" ,HttpStatus.OK );
         }else {
             return chat.get().getMessageList();
         }
