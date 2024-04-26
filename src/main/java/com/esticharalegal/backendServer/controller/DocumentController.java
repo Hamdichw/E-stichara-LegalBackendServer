@@ -3,6 +3,7 @@ package com.esticharalegal.backendServer.controller;
 import com.esticharalegal.backendServer.exceptions.AppException;
 import com.esticharalegal.backendServer.model.Document;
 import com.esticharalegal.backendServer.model.DocumentSigned;
+import com.esticharalegal.backendServer.service.CloudService;
 import com.esticharalegal.backendServer.service.DocumentService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
@@ -25,6 +26,8 @@ import java.util.Optional;
 @RequestMapping("/documents")
 public class DocumentController {
     private final DocumentService documentService;
+
+    private  final CloudService cloudService;
     @GetMapping("/all/{idUser}")
     public ResponseEntity<List<Document>> getAllDocuments(@PathVariable Long idUser) {
         try {
@@ -46,7 +49,7 @@ public class DocumentController {
         Document document = new Document();
         document.setTitle(title);
         document.setDescription(description);
-
+        document.setLinkFile(cloudService.uploadFile(file));
         try {
             document.setContent(file.getBytes());
         } catch (IOException e) {

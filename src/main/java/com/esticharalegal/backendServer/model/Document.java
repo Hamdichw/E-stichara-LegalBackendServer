@@ -37,6 +37,9 @@ public class Document {
     @Column(name = "UploadDate")
     private LocalDateTime uploadDate;
 
+    @Column(name = "linkFile")
+    private String linkFile;
+
     @Lob
     @Column(columnDefinition = "LONGBLOB")
     @JsonIgnore

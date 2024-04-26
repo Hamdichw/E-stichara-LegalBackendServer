@@ -2,9 +2,7 @@ package com.esticharalegal.backendServer.model;
 
 import com.esticharalegal.backendServer.Enum.AppointmentType;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Date;
 @Data
@@ -32,6 +30,9 @@ public class Appointment {
     @Column(name = "EndAppointment")
     private Date end;
 
+
+    @Column(name = "time")
+    private Date time = new Date(System.currentTimeMillis());
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Status")

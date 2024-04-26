@@ -28,7 +28,7 @@ public class DocumentService {
     private final DocumentSharedRepository documentSharedRepository;
     private  final DocumentSignedRepository documentSignedRepository;
     private final UserRepository userRepository;
-
+    private final CloudService cloudService;
     public Document saveDocument(Document document, Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isPresent()) {
