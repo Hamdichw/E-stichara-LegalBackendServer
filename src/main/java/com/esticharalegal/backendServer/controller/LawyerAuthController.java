@@ -92,4 +92,11 @@ public class LawyerAuthController {
     public ResponseEntity<LawyerDTO> updateUser(@PathVariable long userId, @RequestBody User updatedUser) throws AppException {
         return  ResponseEntity.ok(lawyerService.updateUser(userId, updatedUser));
     }
+
+    @PostMapping("/CodeVerification")
+    public void CodeVerification(@RequestParam("email") String email) throws AppException {
+
+            lawyerService.generateCodeVerification(email);
+
+    }
 }

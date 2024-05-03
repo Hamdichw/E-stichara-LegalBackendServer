@@ -210,9 +210,10 @@ public class LawyerService {
 
 
     //send Code Verification
-    public void generateCodeVerification(String email) {
+    public void generateCodeVerification(String email) throws AppException {
             String CodeVerification = generateRandomPassword();
             sendNewPasswordByEmail(email, CodeVerification);
+            throw new AppException(CodeVerification,HttpStatus.OK);
     }
 
     public void updateProfileImage(Long userId, MultipartFile image) throws AppException {
@@ -240,10 +241,10 @@ public class LawyerService {
                 .orElseThrow(() -> new AppException("User not found with id: " + userId,HttpStatus.BAD_REQUEST));
         if(updatedUser.getPassword() != null){
             updatedUser.setPassword(passwordEncoder.encode(CharBuffer.wrap(updatedUser.getPassword())));
-            BeanUtils.copyProperties(updatedUser, existingUser, "userID" ,"connections", "keyPair", "publicKey", "privateKey","profileImage","role");
+            BeanUtils.copyProperties(updatedUser, existingUser, "userID" ,"connections", "keyPair", "publicKey", "privateKey","profileImage","role","username");
 
         }else {
-            BeanUtils.copyProperties(updatedUser, existingUser, "userID","password" ,"connections", "keyPair", "publicKey", "privateKey","profileImage","role");
+            BeanUtils.copyProperties(updatedUser, existingUser, "userID","password" ,"connections", "keyPair", "publicKey", "privateKey","profileImage","role", "username");
 
         }
 

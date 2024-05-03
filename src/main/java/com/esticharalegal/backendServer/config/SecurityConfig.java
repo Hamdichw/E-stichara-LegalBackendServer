@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .sessionManagement(customizer -> customizer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.POST,"ClientAuth/register", "ClientAuth/login","ClientAuth/CodeVerification","ClientAuth/reset" ,"ClientAuth/loginGoogle").permitAll()
-                        .requestMatchers(HttpMethod.POST,"LawyerAuth/register", "LawyerAuth/login", "LawyerAuth/reset").permitAll()
+                        .requestMatchers(HttpMethod.POST,"LawyerAuth/register", "LawyerAuth/login", "LawyerAuth/reset","LawyerAuth/CodeVerification").permitAll()
                         .anyRequest().authenticated())
         ;
         return http.build();
