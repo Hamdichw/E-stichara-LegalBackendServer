@@ -20,7 +20,7 @@ public class WebConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOrigin("https://taupe-chimera-e8d6d6.netlify.app");
+        config.addAllowedOrigin("https://66363b68692e08f89ff6809d--adorable-pegasus-4112fd.netlify.app");
         config.addAllowedOrigin("http://localhost:4200");
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
