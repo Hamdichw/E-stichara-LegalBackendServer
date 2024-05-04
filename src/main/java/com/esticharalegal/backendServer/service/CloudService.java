@@ -18,7 +18,7 @@ public class CloudService {
             // Upload file to Cloudinary
             Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
             // Return the public URL of the uploaded file
-            return (String) uploadResult.get("url");
+            return (String) uploadResult.get("secure_url");
         } catch (IOException e) {
             // Handle exception
             e.printStackTrace();
