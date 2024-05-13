@@ -7,6 +7,8 @@ import com.esticharalegal.backendServer.repository.DocumentRepository;
 import com.esticharalegal.backendServer.repository.DocumentSignedRepository;
 import com.esticharalegal.backendServer.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -24,6 +26,7 @@ public class SignatureService{
     private final DocumentRepository documentRepository;
     private final UserRepository userRepository;
     private final DocumentSignedRepository documentSignedRepository;
+    private final JavaMailSender javaMailSender;
 
 
 
@@ -138,5 +141,13 @@ public class SignatureService{
             throw new RuntimeException(e);
         }
     }
+    public void sendLinkVerification(Long documentId,Long userId) {
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        User user = userRepository.findById(userId).get();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject("Verification Link");
+        mailMessage.setText("https://backendserver.cleverapps.io/docs/Sign/signDocument/"+documentId+"/" + userId);
 
+        javaMailSender.send(mailMessage);
+    }
 }

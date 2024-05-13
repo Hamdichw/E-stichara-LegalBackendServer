@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers(HttpMethod.POST,"ClientAuth/register", "ClientAuth/login","ClientAuth/CodeVerification","ClientAuth/reset" ,"ClientAuth/loginGoogle").permitAll()
                         .requestMatchers(HttpMethod.POST,"LawyerAuth/register", "LawyerAuth/login", "LawyerAuth/reset","LawyerAuth/CodeVerification").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/docs/Sign/signDocument/*/*").permitAll()
                         .anyRequest().authenticated())
         ;
         return http.build();

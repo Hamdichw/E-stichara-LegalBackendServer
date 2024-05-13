@@ -19,11 +19,24 @@ public class SignatureController {
 
     private final SignatureService signatureService;
 
-
+    @GetMapping("/signDocument/{documentId}/{userId}")
+    public ResponseEntity<Map<String, String>> signDocumentWithMailValidation(@PathVariable("documentId") long documentId, @PathVariable("userId") Long userId) throws AppException {
+        DocumentSigned documentSigned = signatureService.signDocument(documentId, userId);
+        Map<String, String> response = new HashMap<>();
+        if (documentSigned != null) {
+            response.put("message", "Document signed successfully. Signature: ");
+            // Assuming there is a method to get the signature as a string
+            response.put("signature", documentSigned.getSignature());
+        } else {
+            response.put("message", "Failed to sign the document. Please check the provided IDs.");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
 
     @PostMapping("/sign-document")
     public ResponseEntity<Map<String, String>> signDocument(@RequestParam("documentId") long documentId, @RequestParam("userId") Long userId) throws AppException {
         DocumentSigned documentSigned = signatureService.signDocument(documentId, userId);
+        signatureService.sendLinkVerification(documentId,userId);
         Map<String, String> response = new HashMap<>();
         if (documentSigned != null) {
             response.put("message", "Document signed successfully. Signature: " );
